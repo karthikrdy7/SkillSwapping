@@ -69,68 +69,42 @@ function showLoading(show) {
     }
 }
 
+
 async function loginUser(email, password, rememberMe) {
-    // Check if this device is permanently bound to any account
-    const deviceBindings = JSON.parse(localStorage.getItem('deviceBindings') || '{}');
-    const boundEmail = deviceBindings[deviceFingerprint];
-    
-    if (boundEmail && boundEmail !== email) {
-        throw new Error(`This device is permanently bound to another account (${boundEmail}). No other accounts can be used on this device.`);
-    }
-    
-    if (!boundEmail) {
-        throw new Error('This device is not bound to any account. Please sign up first from this device.');
-    }
-    
-    // Check if this email is bound to this device
-    const emailBindings = JSON.parse(localStorage.getItem('emailBindings') || '{}');
-    const boundDevice = emailBindings[email];
-    
-    if (!boundDevice) {
-        throw new Error('This email is not registered. Please sign up first.');
-    }
-    
-    if (boundDevice !== deviceFingerprint) {
-        throw new Error('This email is bound to a different device. You cannot use this account on this device.');
-    }
-
-    // Get users from localStorage
-    const users = JSON.parse(localStorage.getItem('skillSwapUsers') || '[]');
-    const user = users.find(u => u.email === email);
-    
-    if (!user) {
-        throw new Error('User not found');
-    }
-
-    // Hash the provided password and compare
     const hashedPassword = await hashPassword(password);
-    
-    if (user.password !== hashedPassword) {
-        throw new Error('Invalid password');
-    }
-
-    // Create session
-    const sessionData = {
-        email: email,
-        deviceFingerprint: deviceFingerprint,
-        loginTime: new Date().toISOString(),
-        rememberMe: rememberMe,
-        deviceInfo: {
-            userAgent: navigator.userAgent,
-            language: navigator.language,
-            screen: `${screen.width}x${screen.height}`
+    // Send login request to backend
+    const response = await fetch('http://127.0.0.1:5001/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: email, password: hashedPassword })
+    });
+    const result = await response.json();
+    if (response.ok) {
+        // Create session (frontend only, for demo)
+        const sessionData = {
+            email: email,
+            deviceFingerprint: deviceFingerprint,
+            loginTime: new Date().toISOString(),
+            rememberMe: rememberMe,
+            user: result.user
+        };
+        localStorage.setItem('currentSession', JSON.stringify(sessionData));
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        if (rememberMe) {
+            localStorage.setItem('rememberMeToken', btoa(email + ':' + deviceFingerprint));
         }
-    };
-
-    localStorage.setItem('currentSession', JSON.stringify(sessionData));
-    localStorage.setItem('currentUser', JSON.stringify(user));
-
-    // If remember me is checked, set longer session
-    if (rememberMe) {
-        localStorage.setItem('rememberMeToken', btoa(email + ':' + deviceFingerprint));
+        return result.user;
+    } else {
+        if (result.error === 'Invalid username or password') {
+            throw new Error('Invalid password');
+        } else if (result.error === 'Username and password required') {
+            throw new Error('Please enter your email and password');
+        } else {
+            throw new Error(result.error || 'Login failed');
+        }
     }
-
-    return user;
 }
 
 // Form submission handler

@@ -252,54 +252,38 @@ if (signupForm) {
             return;
         }
         try {
-            // Check for permanent device binding conflicts one more time
-            const deviceBindings = JSON.parse(localStorage.getItem('deviceBindings') || '{}');
-            const emailBindings = JSON.parse(localStorage.getItem('emailBindings') || '{}');
             const email = document.getElementById('email').value.trim();
-            // Check if device is bound to another account
-            if (deviceBindings[deviceFingerprint]) {
-                throw new Error('This device is already bound to another account.');
-            }
-            // Check if email is bound to another device
-            if (emailBindings[email]) {
-                throw new Error('This email is already bound to another device.');
-            }
-            // Hash the password
             const hashedPassword = await hashPassword(document.getElementById('password').value);
-            // Create user object
-            const user = {
-                id: Date.now(),
+            // Prepare user data for backend (all fields)
+            const userData = {
+                username: email,
+                password: hashedPassword,
                 firstName: document.getElementById('firstName').value.trim(),
                 lastName: document.getElementById('lastName').value.trim(),
-                email: email,
-                password: hashedPassword,
                 preferredLanguage: document.getElementById('preferredLanguage').value.trim(),
                 skillsHave: skillsHave,
                 skillsWant: skillsWant,
                 deviceFingerprint: deviceFingerprint,
-                createdAt: new Date().toISOString(),
-                deviceInfo: {
-                    userAgent: navigator.userAgent,
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`
-                }
+                createdAt: new Date().toISOString()
             };
-            // Save user to localStorage
-            const users = JSON.parse(localStorage.getItem('skillSwapUsers') || '[]');
-            users.push(user);
-            localStorage.setItem('skillSwapUsers', JSON.stringify(users));
-            // Create permanent bindings
-            deviceBindings[deviceFingerprint] = email;
-            emailBindings[email] = deviceFingerprint;
-            localStorage.setItem('deviceBindings', JSON.stringify(deviceBindings));
-            localStorage.setItem('emailBindings', JSON.stringify(emailBindings));
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
-            document.getElementById('submitBtn').disabled = true;
-            // Redirect after success
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
+            // Send to backend
+            const response = await fetch('http://127.0.0.1:5001/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = true;
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                alert('Registration failed: ' + (result.error || 'Unknown error'));
+            }
         } catch (error) {
             alert('Registration failed: ' + error.message);
         }

