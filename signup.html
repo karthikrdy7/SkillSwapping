@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Skill Swapping</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .signup-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .signup-header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        .signup-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .signup-body {
+            padding: 30px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e1e5e9;
+            z-index: 0;
+        }
+
+        .step:first-child::before {
+            display: none;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e1e5e9;
+            color: #666;
+            line-height: 30px;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step.active .step-number {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #27ae60;
+            color: white;
+        }
+
+        .step.completed::before {
+            background: #27ae60;
+        }
+
+        .step-label {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .skills-container {
+            margin-bottom: 20px;
+        }
+
+        .skills-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .skills-input-group input {
+            flex: 1;
+        }
+
+        .add-skill-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .add-skill-btn:hover {
+            background: #2980b9;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 40px;
+            align-items: center;
+        }
+
+        .skill-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remove-skill {
+            background: none;
+            border: none;
+            color: #1976d2;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .remove-skill:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .device-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .device-warning h3 {
+            color: #d68910;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .device-warning p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .device-warning .device-id {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .otp-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-display {
+            background: #f8f9fa;
+            border: 2px solid #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: monospace;
+            color: #2c3e50;
+            letter-spacing: 5px;
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 18px;
+            font-family: monospace;
+            letter-spacing: 3px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44, 62, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .signin-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .signin-link a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signin-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .signup-container {
+                margin: 10px;
+            }
+            
+            .signup-header {
+                padding: 20px;
+            }
+            
+            .signup-body {
+                padding: 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-header">
+            <div class="logo">🔄</div>
+            <h1>Join Skill Swapping</h1>
+            <p>Create your account and start swapping skills</p>
+        </div>
+        
+        <div class="signup-body">
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Basic Info</span>
+                </div>
+                <div class="step" id="step2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Skills</span>
+                </div>
+                <div class="step" id="step3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Device Binding</span>
+                </div>
+                <div class="step" id="step4">
+                    <span class="step-number">4</span>
+                    <span class="step-label">Verify</span>
+                </div>
+            </div>
+
+            <form id="signupForm">
+                <!-- Step 1: Basic Information -->
+                <div class="step-content active" id="step1Content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="error-message" id="firstNameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="error-message" id="lastNameError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferredLanguage">Preferred Language</label>
+                        <input type="text" id="preferredLanguage" name="preferredLanguage" placeholder="e.g., English, Spanish, French" required>
+                        <div class="error-message" id="preferredLanguageError"></div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Skills -->
+                <div class="step-content" id="step2Content">
+                    <div class="skills-container">
+                        <label>Skills You Have</label>
+                        <div class="skills-input-group">
+                            <input type="text" id="skillsHaveInput" placeholder="Enter a skill you have">
+                            <button type="button" class="add-skill-btn" onclick="addSkill('have')">Add</button>
+                        </div>
+                        <div class="skills-tags" id="skillsHaveTags"></div>
+                    </div>
+                    
+                    <div class="skills-container">
+                        <label>Skills You Want to Learn</label>
+                        <div class="skills-input-group">
+                            <input type="text" id="skillsWantInput" placeholder="Enter a skill you want to learn">
+                            <button type="button" class="add-skill-btn" onclick="addSkill('want')">Add</button>
+                        </div>
+                        <div class="skills-tags" id="skillsWantTags"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Device Warning -->
+                <div class="step-content" id="step3Content">
+                    <div class="device-warning">
+                        <h3>⚠️ PERMANENT DEVICE BINDING POLICY</h3>
+                        <p><strong>IMPORTANT:</strong> Your account will be permanently bound to this device.</p>
+                        <p><strong>This means:</strong></p>
+                        <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
+                            <li>You can NEVER use this account on any other device</li>
+                            <li>No other account can EVER be created or used on this device</li>
+                            <li>This binding is PERMANENT and cannot be changed</li>
+                            <li>If you lose this device, you lose access to your account</li>
+                        </ul>
+                        <p><strong>Your Device ID:</strong></p>
+                        <div class="device-id" id="deviceId">Generating...</div>
+                        <p><strong>Are you sure you want to permanently bind your account to this device?</strong></p>
+                    </div>
+                </div>
+
+                <!-- Step 4: OTP Verification -->
+                <div class="step-content" id="step4Content">
+                    <div class="otp-container">
+                        <h3>Email Verification</h3>
+                        <p>We've generated a verification code for you:</p>
+                        <div class="otp-display" id="otpDisplay">000000</div>
+                        <p>Please enter this code to verify your email:</p>
+                        <div class="form-group">
+                            <input type="text" id="otpInput" class="otp-input" placeholder="000000" maxlength="6" required>
+                            <div class="error-message" id="otpError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    Account created successfully! Redirecting to sign in...
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)">Previous</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">Next</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Create Account</button>
+                </div>
+            </form>
+
+            <div class="signin-link">
+                Already have an account? <a href="login.html">Sign in here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let skillsHave = [];
+        let skillsWant = [];
+        let deviceFingerprint = '';
+        let generatedOTP = '';
+
+        // Generate device fingerprint
+        function generateDeviceFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('Device fingerprint', 2, 2);
+            
+            const fingerprint = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width + 'x' + screen.height,
+                screen.colorDepth,
+                new Date().getTimezoneOffset(),
+                canvas.toDataURL()
+            ].join('|');
+            
+            return btoa(fingerprint).substring(0, 32);
+        }
+
+        // Initialize device fingerprint on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            deviceFingerprint = generateDeviceFingerprint();
+            document.getElementById('deviceId').textContent = deviceFingerprint;
+            
+            // Check if device is already bound
+            checkDeviceBinding();
+        });
+
+        // Check if device is already bound to an account
+        function checkDeviceBinding() {
+            const deviceBindings = JSON.parse(localStorage.getItem('deviceBindings') || '{}');
+            const boundEmail = deviceBindings[deviceFingerprint];
+            
+            if (boundEmail) {
+                alert(`This device is already permanently bound to account: ${boundEmail}. You cannot create a new account on this device.`);
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Hash password function
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Validation functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const field = document.getElementById(fieldId);
+            
+            if (field) field.style.borderColor = '#dc3545';
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function hideError(fieldId) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const field = document.getElementById(fieldId);
+            
+            if (field) field.style.borderColor = '#e1e5e9';
+            if (errorElement) errorElement.style.display = 'none';
+        }
+
+        // Step navigation
+        function changeStep(direction) {
+            if (direction === 1 && !validateCurrentStep()) {
+                return;
+            }
+
+            const newStep = currentStep + direction;
+            
+            if (newStep < 1 || newStep > 4) return;
+
+            // Hide current step
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}Content`).classList.remove('active');
+
+            // Update current step
+            currentStep = newStep;
+
+            // Show new step
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}Content`).classList.add('active');
+
+            // Mark previous steps as completed
+            for (let i = 1; i < currentStep; i++) {
+                document.getElementById(`step${i}`).classList.add('completed');
+            }
+
+            // Update buttons
+            updateStepButtons();
+
+            // Generate OTP when reaching step 4
+            if (currentStep === 4) {
+                generateOTP();
+            }
+        }
+
+        function updateStepButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+            
+            if (currentStep === 4) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Validate current step
+        function validateCurrentStep() {
+            let isValid = true;
+
+            if (currentStep === 1) {
+                const fields = ['firstName', 'lastName', 'email', 'password', 'confirmPassword', 'preferredLanguage'];
+                
+                fields.forEach(field => {
+                    const value = document.getElementById(field).value.trim();
+                    hideError(field);
+                    
+                    if (!value) {
+                        showError(field, 'This field is required');
+                        isValid = false;
+                    }
+                });
+
+                const email = document.getElementById('email').value.trim();
+                if (email && !validateEmail(email)) {
+                    showError('email', 'Please enter a valid email address');
+                    isValid = false;
+                }
+
+                const password = document.getElementById('password').value;
+                if (password && !validatePassword(password)) {
+                    showError('password', 'Password must be at least 6 characters long');
+                    isValid = false;
+                }
+
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                if (password && confirmPassword && password !== confirmPassword) {
+                    showError('confirmPassword', 'Passwords do not match');
+                    isValid = false;
+                }
+
+                // Check if email is already registered
+                if (email && validateEmail(email)) {
+                    const users = JSON.parse(localStorage.getItem('skillSwapUsers') || '[]');
+                    if (users.some(user => user.email === email)) {
+                        showError('email', 'This email is already registered');
+                        isValid = false;
+                    }
+                }
+            }
+
+            if (currentStep === 2) {
+                if (skillsHave.length === 0) {
+                    alert('Please add at least one skill you have');
+                    isValid = false;
+                }
+                if (skillsWant.length === 0) {
+                    alert('Please add at least one skill you want to learn');
+                    isValid = false;
+                }
+            }
+
+            if (currentStep === 3) {
+                // User must acknowledge the permanent binding
+                const confirmed = confirm(
+                    'FINAL WARNING: Your account will be PERMANENTLY bound to this device. ' +
+                    'You will NEVER be able to use this account on any other device, and no other account can be used on this device. ' +
+                    'This binding is irreversible. Do you want to proceed?'
+                );
+                if (!confirmed) {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Skills management
+        function addSkill(type) {
+            const inputId = type === 'have' ? 'skillsHaveInput' : 'skillsWantInput';
+            const skillsArray = type === 'have' ? skillsHave : skillsWant;
+            const tagsContainer = type === 'have' ? 'skillsHaveTags' : 'skillsWantTags';
+            
+            const input = document.getElementById(inputId);
+            const skill = input.value.trim();
+            
+            if (skill && !skillsArray.includes(skill)) {
+                skillsArray.push(skill);
+                input.value = '';
+                renderSkillTags(type, skillsArray, tagsContainer);
+            }
+        }
+
+        function renderSkillTags(type, skillsArray, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            skillsArray.forEach((skill, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag';
+                tag.innerHTML = `
+                    ${skill}
+                    <button type="button" class="remove-skill" onclick="removeSkill('${type}', ${index})">×</button>
+                `;
+                container.appendChild(tag);
+            });
+        }
+
+        function removeSkill(type, index) {
+            const skillsArray = type === 'have' ? skillsHave : skillsWant;
+            const tagsContainer = type === 'have' ? 'skillsHaveTags' : 'skillsWantTags';
+            
+            skillsArray.splice(index, 1);
+            renderSkillTags(type, skillsArray, tagsContainer);
+        }
+
+        // Add skills on Enter key press
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('skillsHaveInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill('have');
+                }
+            });
+
+            document.getElementById('skillsWantInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill('want');
+                }
+            });
+        });
+
+        // OTP Generation and Verification
+        function generateOTP() {
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('otpDisplay').textContent = generatedOTP;
+        }
+
+        function validateOTP() {
+            const enteredOTP = document.getElementById('otpInput').value.trim();
+            return enteredOTP === generatedOTP;
+        }
+
+        // Form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Final validation
+            if (!validateOTP()) {
+                showError('otp', 'Invalid verification code. Please check and try again.');
+                return;
+            }
+
+            try {
+                // Check for permanent device binding conflicts one more time
+                const deviceBindings = JSON.parse(localStorage.getItem('deviceBindings') || '{}');
+                const emailBindings = JSON.parse(localStorage.getItem('emailBindings') || '{}');
+                
+                const email = document.getElementById('email').value.trim();
+                
+                // Check if device is bound to another account
+                if (deviceBindings[deviceFingerprint]) {
+                    throw new Error('This device is already bound to another account.');
+                }
+                
+                // Check if email is bound to another device
+                if (emailBindings[email]) {
+                    throw new Error('This email is already bound to another device.');
+                }
+
+                // Hash the password
+                const hashedPassword = await hashPassword(document.getElementById('password').value);
+
+                // Create user object
+                const user = {
+                    id: Date.now(),
+                    firstName: document.getElementById('firstName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    email: email,
+                    password: hashedPassword,
+                    preferredLanguage: document.getElementById('preferredLanguage').value.trim(),
+                    skillsHave: skillsHave,
+                    skillsWant: skillsWant,
+                    deviceFingerprint: deviceFingerprint,
+                    createdAt: new Date().toISOString(),
+                    deviceInfo: {
+                        userAgent: navigator.userAgent,
+                        language: navigator.language,
+                        screen: `${screen.width}x${screen.height}`
+                    }
+                };
+
+                // Save user to localStorage
+                const users = JSON.parse(localStorage.getItem('skillSwapUsers') || '[]');
+                users.push(user);
+                localStorage.setItem('skillSwapUsers', JSON.stringify(users));
+
+                // Create permanent bindings
+                deviceBindings[deviceFingerprint] = email;
+                emailBindings[email] = deviceFingerprint;
+                
+                localStorage.setItem('deviceBindings', JSON.stringify(deviceBindings));
+                localStorage.setItem('emailBindings', JSON.stringify(emailBindings));
+
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = true;
+
+                // Redirect after success
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+
+            } catch (error) {
+                alert('Registration failed: ' + error.message);
+            }
+        });
+
+        // Initialize on page load
+        updateStepButtons();
+    </script>
+</body>
+</html>

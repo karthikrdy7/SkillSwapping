@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Device Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .admin-body {
+            padding: 30px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2c3e50;
+        }
+
+        .info-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .device-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .back-link a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🔧 Device Management</h1>
+            <p>Manage device bindings and user accounts</p>
+        </div>
+        
+        <div class="admin-body">
+            <div class="warning-box">
+                <h4>⚠️ Warning</h4>
+                <p>This page allows you to manage device bindings and clear user data. Use with caution as these actions cannot be undone.</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Current Device Information</h3>
+                <p><strong>Device Fingerprint:</strong></p>
+                <div class="device-info" id="deviceInfo">Loading...</div>
+            </div>
+
+            <div class="info-section">
+                <h3>Device Binding Status</h3>
+                <div id="bindingStatus">Checking...</div>
+            </div>
+
+            <div class="info-section">
+                <h3>Registered Users</h3>
+                <div id="userCount">Loading...</div>
+                <table class="data-table" id="usersTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Device</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-info" onclick="refreshData()">🔄 Refresh Data</button>
+                <button class="btn btn-warning" onclick="clearDeviceBindings()">🔓 Clear Device Bindings</button>
+                <button class="btn btn-danger" onclick="clearAllUsers()">🗑️ Clear All Users</button>
+                <button class="btn btn-danger" onclick="clearAllData()">💣 Reset Everything</button>
+            </div>
+
+            <div class="status" id="statusMessage"></div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a> | 
+                <a href="signup.html">Sign Up</a> | 
+                <a href="login.html">Login</a> |
+                <a href="signin.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deviceFingerprint = '';
+
+        // Generate device fingerprint
+        function generateDeviceFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('Device fingerprint', 2, 2);
+            
+            const fingerprint = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width + 'x' + screen.height,
+                screen.colorDepth,
+                new Date().getTimezoneOffset(),
+                canvas.toDataURL()
+            ].join('|');
+            
+            return btoa(fingerprint).substring(0, 32);
+        }
+
+        function showStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function refreshData() {
+            deviceFingerprint = generateDeviceFingerprint();
+            document.getElementById('deviceInfo').textContent = deviceFingerprint;
+            
+            // Check device binding
+            const deviceBindings = JSON.parse(localStorage.getItem('deviceBindings') || '{}');
+            const emailBindings = JSON.parse(localStorage.getItem('emailBindings') || '{}');
+            const boundEmail = deviceBindings[deviceFingerprint];
+            
+            let bindingStatusHtml = '';
+            if (boundEmail) {
+                bindingStatusHtml = `
+                    <div style="color: #dc3545; padding: 15px; background: #f8d7da; border-radius: 8px;">
+                        <strong>Device is BOUND</strong><br>
+                        Bound to email: <code>${boundEmail}</code>
+                    </div>
+                `;
+            } else {
+                bindingStatusHtml = `
+                    <div style="color: #28a745; padding: 15px; background: #d4edda; border-radius: 8px;">
+                        <strong>Device is FREE</strong><br>
+                        No account bound to this device
+                    </div>
+                `;
+            }
+            document.getElementById('bindingStatus').innerHTML = bindingStatusHtml;
+            
+            // Load users
+            const users = JSON.parse(localStorage.getItem('skillSwapUsers') || '[]');
+            document.getElementById('userCount').innerHTML = `
+                <p><strong>Total Users:</strong> ${users.length}</p>
+                <p><strong>Device Bindings:</strong> ${Object.keys(deviceBindings).length}</p>
+                <p><strong>Email Bindings:</strong> ${Object.keys(emailBindings).length}</p>
+            `;
+            
+            // Show users table
+            if (users.length > 0) {
+                const tableBody = document.getElementById('usersTableBody');
+                tableBody.innerHTML = '';
+                
+                users.forEach(user => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${user.firstName} ${user.lastName}</td>
+                        <td>${user.email}</td>
+                        <td><code>${user.deviceFingerprint || 'N/A'}</code></td>
+                        <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                    `;
+                });
+                
+                document.getElementById('usersTable').style.display = 'table';
+            } else {
+                document.getElementById('usersTable').style.display = 'none';
+            }
+        }
+
+        function clearDeviceBindings() {
+            if (confirm('Are you sure you want to clear all device bindings? This will allow new accounts to be created on any device.')) {
+                localStorage.removeItem('deviceBindings');
+                localStorage.removeItem('emailBindings');
+                showStatus('Device bindings cleared successfully!');
+                refreshData();
+            }
+        }
+
+        function clearAllUsers() {
+            if (confirm('Are you sure you want to delete all user accounts? This action cannot be undone.')) {
+                localStorage.removeItem('skillSwapUsers');
+                showStatus('All user accounts deleted!');
+                refreshData();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('This will delete EVERYTHING: users, bindings, and sessions. Are you absolutely sure?')) {
+                if (confirm('Last chance! This will completely reset the application. Continue?')) {
+                    // Clear all skill swapping related data
+                    localStorage.removeItem('skillSwapUsers');
+                    localStorage.removeItem('deviceBindings');
+                    localStorage.removeItem('emailBindings');
+                    localStorage.removeItem('currentSession');
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('rememberMeToken');
+                    
+                    showStatus('All data cleared! Application reset to initial state.');
+                    refreshData();
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+        });
+    </script>
+</body>
+</html>
