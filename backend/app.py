@@ -1,0 +1,22 @@
+from flask import Flask, send_from_directory
+import os
+
+app = Flask(__name__, static_folder='../')
+
+# Serve static files (HTML, CSS, JS)
+@app.route('/')
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
+
+# Example API endpoint
+@app.route('/api/hello')
+def hello_api():
+    return {'message': 'Hello from Flask!'}
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)

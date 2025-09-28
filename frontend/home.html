@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Skill Swapping</title>
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 100%;"/>
+                </div>
+                <span>Skill Swapping</span>
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-section="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#learning" class="nav-link" data-section="learning">Learning About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+                </li>
+            </ul>
+
+            <div class="user-actions">
+                <div class="user-info" id="userInfo">
+                    <div class="user-avatar" id="userAvatar">You</div>
+                    <span id="userName">are Welcome!</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section class="section home-section" id="home">
+            <div class="section-content">
+                <div class="welcome-content">
+                    <h1 class="welcome-title">Welcome to Your Skill Journey</h1>
+                    <h2 class="welcome-subtitle">Learn. Share. Grow Together</h2>
+                    <p class="welcome-description">
+                        Discover a world of learning opportunities where every skill shared sparks new connections. 
+                        Whether you're teaching what you love or learning what excites you, our community is here to support your growth.
+                    </p>
+                    <div class="home-buttons" style="margin: 30px 0 40px 0; display: flex; justify-content: center; gap: 20px;">
+                        <a href="learning.html"><button class="home-btn" id="getStartedBtn" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; padding: 15px 35px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Get Started</button></a>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Find Perfect Matches</h3>
+                        <p class="feature-description">Our smart matching system connects you with people who have the skills you want to learn and want to learn the skills you have.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3 class="feature-title">Easy Communication</h3>
+                        <p class="feature-description">Connect instantly with skill partners through our messaging system. Schedule sessions, share resources, and track your progress.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⭐</div>
+                        <h3 class="feature-title">Build Your Reputation</h3>
+                        <p class="feature-description">Earn ratings and reviews as you help others learn. Build your reputation as a trusted skill sharing partner in the community.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3 class="feature-title">Track Your Growth</h3>
+                        <p class="feature-description">Monitor your learning progress, see your skill development over time, and celebrate your achievements with the community.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3 class="feature-title">Global Community</h3>
+                        <p class="feature-description">Connect with learners and teachers from around the world. Access diverse perspectives and expertise in every skill area.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">Secure Platform</h3>
+                        <p class="feature-description">Your account is permanently secured to your device. Enjoy peace of mind with our robust security and privacy protection.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning About Section -->
+        <section class="section learning-section" id="learning">
+            <div class="section-content">
+                <h2 class="section-title">Learning About Skill Swapping</h2>
+                
+                <div class="learning-content">
+                    <div class="learning-item">
+                        <h3 class="learning-title">
+                            <span>🤝</span>
+                            What is Skill Swapping?
+                        </h3>
+                        <p class="learning-description">
+                            Skill swapping is a collaborative learning approach where people exchange knowledge and expertise. 
+                            Instead of traditional one-way teaching, both participants teach and learn from each other, 
+                            creating a mutually beneficial learning experience.
+                        </p>
+                    </div>
+
+                    <div class="learning-item">
+                        <h3 class="learning-title">
+                            <span>💡</span>
+                            How Does It Work?
+                        </h3>
+                        <p class="learning-description">
+                            Our platform matches you with people based on complementary skills. If you know programming and want to learn design, 
+                            we'll connect you with designers who want to learn programming. You can then schedule sessions, 
+                            share resources, and learn from each other at your own pace.
+                        </p>
+                    </div>
+
+                    <div class="learning-item">
+                        <h3 class="learning-title">
+                            <span>🌟</span>
+                            Benefits of Skill Swapping
+                        </h3>
+                        <p class="learning-description">
+                            • <strong>Cost-effective:</strong> Learn new skills without paying for courses<br>
+                            • <strong>Personalized:</strong> Get one-on-one attention tailored to your needs<br>
+                            • <strong>Network building:</strong> Connect with like-minded professionals<br>
+                            • <strong>Confidence building:</strong> Teaching others reinforces your own knowledge<br>
+                            • <strong>Flexible scheduling:</strong> Learn at your own pace and convenience
+                        </p>
+                    </div>
+
+                    <div class="learning-item">
+                        <h3 class="learning-title">
+                            <span>🚀</span>
+                            Getting Started
+                        </h3>
+                        <p class="learning-description">
+                            1. <strong>Set up your profile:</strong> List the skills you have and want to learn<br>
+                            2. <strong>Browse matches:</strong> Find people with complementary skills<br>
+                            3. <strong>Connect:</strong> Send messages and introduce yourself<br>
+                            4. <strong>Schedule sessions:</strong> Plan your skill exchange meetings<br>
+                            5. <strong>Start learning:</strong> Begin your collaborative learning journey
+                        </p>
+                    </div>
+
+                    <div class="learning-item">
+                        <h3 class="learning-title">
+                            <span>🏆</span>
+                            Success Tips
+                        </h3>
+                        <p class="learning-description">
+                            • Be clear about your learning goals and what you can offer<br>
+                            • Maintain regular communication with your skill swap partners<br>
+                            • Come prepared to sessions with questions and materials<br>
+                            • Be patient and supportive - everyone learns at different speeds<br>
+                            • Provide constructive feedback and encourage your partners
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section contact-section" id="contact">
+            <div class="section-content">
+                <h2 class="section-title">Get In Touch</h2>
+                
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Contact Information</h3>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div>
+                                <strong>Email</strong><br>
+                                poojareddy@mail.com
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div>
+                                <strong>Phone</strong><br>
+                                +91 987222210
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div>
+                                <strong>Address</strong><br>
+                                123 Learning Street<br>
+                                Knowledge City, LC 12345
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">🕐</div>
+                            <div>
+                                <strong>Support Hours</strong><br>
+                                Mon-Fri: 9:00 AM - 6:00 PM<br>
+                                Weekend: 10:00 AM - 4:00 PM
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-form">
+                        <h3>Send us a Message</h3>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" placeholder="Tell us how we can help you..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+   
+    <script src="js/home.js"></script>
+</body>
+</html>

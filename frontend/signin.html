@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Skill Swapping</title>
+    <link rel="stylesheet" href="css/signin.css">
+</head>
+<body>
+    <div class="signin-container">
+        <div class="signin-header">
+            <div class="logo">🔄</div>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
+        </div>
+        
+        <div class="signin-body">
+            <div class="device-warning">
+                <h4>⚠️ Permanent Device Binding Policy</h4>
+                <p>You can only sign in if your account is permanently bound to this device.</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                Sign in successful! Redirecting...
+            </div>
+            
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="error-message" id="passwordError">Please enter your password</div>
+                </div>
+
+                <div class="loading" id="loading" style="display:none;">
+                    <div class="spinner"></div>
+                    <p>Signing you in...</p>
+                </div>
+
+                <button type="submit" class="signin-btn" id="signinBtn">Sign In</button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="#" onclick="forgotPassword()">Forgot your password?</a>
+            </div>
+
+            <div class="signup-link">
+                Don't have an account? <a href="signup.html">Sign up here</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/signin.js"></script>
+</body>
+</html>

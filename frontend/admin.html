@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Device Management</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🔧 Device Management</h1>
+            <p>Manage device bindings and user accounts</p>
+        </div>
+        
+        <div class="admin-body">
+            <div class="warning-box">
+                <h4>⚠️ Warning</h4>
+                <p>This page allows you to manage device bindings and clear user data. Use with caution as these actions cannot be undone.</p>
+            </div>
+
+            <div class="info-section">
+                <h3>Current Device Information</h3>
+                <p><strong>Device Fingerprint:</strong></p>
+                <div class="device-info" id="deviceInfo">Loading...</div>
+            </div>
+
+            <div class="info-section">
+                <h3>Device Binding Status</h3>
+                <div id="bindingStatus">Checking...</div>
+            </div>
+
+            <div class="info-section">
+                <h3>Registered Users</h3>
+                <div id="userCount">Loading...</div>
+                <table class="data-table" id="usersTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Device</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-info" onclick="refreshData()">🔄 Refresh Data</button>
+                <button class="btn btn-warning" onclick="clearDeviceBindings()">🔓 Clear Device Bindings</button>
+                <button class="btn btn-danger" onclick="clearAllUsers()">🗑️ Clear All Users</button>
+                <button class="btn btn-danger" onclick="clearAllData()">💣 Reset Everything</button>
+            </div>
+
+            <div class="status" id="statusMessage"></div>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a> | 
+                <a href="signup.html">Sign Up</a> | 
+                <a href="login.html">Login</a> |
+                <a href="signin.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
