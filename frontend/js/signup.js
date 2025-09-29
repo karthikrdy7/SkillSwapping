@@ -276,11 +276,34 @@ if (signupForm) {
             });
             const result = await response.json();
             if (response.ok) {
+                // Automatically log the user in and redirect to home page
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('submitBtn').disabled = true;
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+                // Log in user using backend login API
+                const loginResponse = await fetch('http://127.0.0.1:5001/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: email, password: hashedPassword })
+                });
+                const loginResult = await loginResponse.json();
+                if (loginResponse.ok) {
+                    // Store session info in localStorage (same as login.js)
+                    const deviceFingerprint = userData.deviceFingerprint;
+                    const sessionData = {
+                        email: email,
+                        deviceFingerprint: deviceFingerprint,
+                        loginTime: new Date().toISOString(),
+                        rememberMe: false,
+                        user: loginResult.user
+                    };
+                    localStorage.setItem('currentSession', JSON.stringify(sessionData));
+                    localStorage.setItem('currentUser', JSON.stringify(loginResult.user));
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1500);
+                } else {
+                    alert('Signup succeeded but automatic login failed: ' + (loginResult.error || 'Unknown error'));
+                }
             } else {
                 alert('Registration failed: ' + (result.error || 'Unknown error'));
             }

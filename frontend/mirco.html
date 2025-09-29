@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro Learning - Skill Swapping</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/learning.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">Skill Swapping</a>
+        <div class="user-actions" style="float:right;display:flex;align-items:center;gap:10px;">
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Welcome!</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <main class="main-content">
+        <section class="learning-section">
+            <h2>Micro Learning</h2>
+            <p>Welcome to Micro Learning! Here you'll find short, focused lessons and tips to boost your skills quickly.</p>
+            <a href="learning.html">&#8592; Back to Learning</a>
+        </section>
+    </main>
+</body>
+<script>
+// Display logged-in user info
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userNameSpan = document.getElementById('userName');
+    const userAvatarDiv = document.getElementById('userAvatar');
+    if (user && user.firstName) {
+        userNameSpan.textContent = user.firstName + (user.lastName ? ' ' + user.lastName : '');
+        userAvatarDiv.textContent = user.firstName.charAt(0).toUpperCase();
+    }
+});
+// Simple logout function
+function logout() {
+    localStorage.removeItem('currentSession');
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+}
+</script>
+</html>

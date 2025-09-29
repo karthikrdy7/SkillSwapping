@@ -49,14 +49,33 @@
         <section id="micro" class="learning-section">
             <h2>Micro Learning</h2>
             <p>Short, focused learning sessions or skills. Perfect for quick tips, tricks, or single-topic lessons.</p>
-            <button class="learning-btn" id="microBtn">Explore Micro Learning</button>
+            <a href="mirco.html"><button class="learning-btn" id="microBtn">Explore Micro Learning</button></a>
         </section>
         <section id="macro" class="learning-section">
             <h2>Macro Learning</h2>
             <p>Comprehensive, in-depth learning experiences. Ideal for mastering a subject or completing a full course.</p>
-            <button class="learning-btn" id="macroBtn">Explore Macro Learning</button>
+            <a href="marco.html"><button class="learning-btn" id="macroBtn">Explore Macro Learning</button></a>
         </section>
     </main>
 </body>
 <script src="js/home.js"></script>
+<script src="js/learning.js"></script>
+<script>
+// Display logged-in user info
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userNameSpan = document.getElementById('userName');
+    const userAvatarDiv = document.getElementById('userAvatar');
+    if (user && user.firstName) {
+        userNameSpan.textContent = user.firstName + (user.lastName ? ' ' + user.lastName : '');
+        userAvatarDiv.textContent = user.firstName.charAt(0).toUpperCase();
+    }
+});
+// Simple logout function
+function logout() {
+    localStorage.removeItem('currentSession');
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+}
+</script>
 </html>
