@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marco Learning Dashboard - SkillSwapping</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/marco-dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">SkillSwapping</a>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="learning.html">Learning</a>
+            <a href="dashboard.html">Main Dashboard</a>
+            <a href="micro-dashboard.html">Micro Dashboard</a>
+        </div>
+        <div class="user-actions">
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Welcome!</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header marco-header">
+            <h1>🎓</h1>
+            <div class="stats">
+                <div class="stat-item macro-stat">
+                    <span class="stat-number" id="activeUsers">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item macro-stat">
+                    <span class="stat-number" id="comprehensiveSkills">0</span>
+                    <span class="stat-label">Comprehensive Skills</span>
+                </div>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">🔄 Refresh</button>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loader"></div>
+                <p>Loading Marco learning opportunities...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-message" style="display: none;">
+                <h3>❌ Error Loading Data</h3>
+                <p id="errorText">Unable to fetch dashboard data</p>
+                <button onclick="loadMarcoDashboard()" class="retry-btn">Try Again</button>
+            </div>
+
+            <!-- Long-term Mentorship Opportunities -->
+            <section id="mentorshipSection" class="section macro-section" style="display: none;">
+                <h2>🧑‍🏫 Long-term Mentorship Opportunities</h2>
+                <div class="mentorship-filter">
+                    <label for="skillFilter">Filter by skill:</label>
+                    <select id="skillFilter">
+                        <option value="">All Skills</option>
+                    </select>
+                </div>
+                <div id="mentorshipList" class="mentorship-container">
+                    <!-- Mentorship opportunities will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/marco-dashboard.js"></script>
+    <script>
+        // User info and logout functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const userNameSpan = document.getElementById('userName');
+            const userAvatarDiv = document.getElementById('userAvatar');
+            if (user && user.firstName) {
+                userNameSpan.textContent = user.firstName + (user.lastName ? ' ' + user.lastName : '');
+                userAvatarDiv.textContent = user.firstName.charAt(0).toUpperCase();
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('currentSession');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

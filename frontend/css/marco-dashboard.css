@@ -1,0 +1,432 @@
+/* Marco Dashboard Specific Styles */
+
+/* Navigation styles */
+.navbar {
+    background: linear-gradient(135deg, #2d3748, #4a5568);
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #4299e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.logout-btn {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background: #c53030;
+}
+
+/* Marco-specific header styling */
+.marco-header {
+    background: linear-gradient(135deg, #2b6cb0, #3182ce, #4299e1);
+    color: white;
+}
+
+.marco-header h1 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+/* Marco-specific stats */
+.macro-stat {
+    background: linear-gradient(135deg, #1a365d, #2c5282);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.macro-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+}
+
+/* Macro-specific sections */
+.macro-section {
+    border-left: 5px solid #3182ce;
+}
+
+.macro-section h2 {
+    color: #1a365d;
+    border-bottom-color: #3182ce;
+}
+
+/* Mentorship Container */
+.mentorship-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.mentorship-card {
+    background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+    border: 2px solid #3182ce;
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mentorship-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(49, 130, 206, 0.2);
+}
+
+.mentor-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.mentor-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #3182ce;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.mentor-details h3 {
+    margin: 0;
+    color: #1a365d;
+    font-size: 1.2rem;
+}
+
+.mentor-skills {
+    margin: 15px 0;
+}
+
+.skill-tag {
+    background: #3182ce;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin: 3px;
+    display: inline-block;
+}
+
+.mentorship-duration {
+    color: #2c5282;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.connect-btn {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.connect-btn:hover {
+    background: #2c5282;
+}
+
+/* Learning Paths */
+.learning-paths-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.learning-path-card {
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    border: 2px solid #a0aec0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.learning-path-card:hover {
+    border-color: #3182ce;
+    transform: translateY(-3px);
+}
+
+.path-title {
+    font-size: 1.3rem;
+    color: #1a365d;
+    margin-bottom: 10px;
+}
+
+.path-description {
+    color: #4a5568;
+    margin-bottom: 15px;
+}
+
+.path-progress {
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.path-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3182ce, #4299e1);
+    transition: width 0.3s ease;
+}
+
+.path-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+/* Expert Mentors */
+.experts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.expert-card {
+    background: linear-gradient(135deg, #fffaf0, #ffeaa7);
+    border: 2px solid #ed8936;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.expert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(237, 137, 54, 0.2);
+}
+
+.expert-badge {
+    background: #ed8936;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Progress Container */
+.progress-container {
+    background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.progress-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #68d391;
+}
+
+.progress-item:last-child {
+    border-bottom: none;
+}
+
+.progress-skill {
+    font-weight: bold;
+    color: #22543d;
+}
+
+.progress-bar {
+    flex: 1;
+    margin: 0 20px;
+    background: #e6fffa;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38a169, #48bb78);
+    transition: width 0.3s ease;
+}
+
+.progress-percentage {
+    color: #22543d;
+    font-weight: bold;
+}
+
+/* Recommendations */
+.recommendations-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.recommendation-card {
+    background: linear-gradient(135deg, #e6fffa, #b2f5ea);
+    border: 2px solid #38b2ac;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(56, 178, 172, 0.2);
+}
+
+.recommendation-title {
+    font-size: 1.2rem;
+    color: #234e52;
+    margin-bottom: 10px;
+}
+
+.recommendation-description {
+    color: #2c7a7b;
+    margin-bottom: 15px;
+}
+
+.recommendation-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+/* Filter styles */
+.mentorship-filter {
+    margin-bottom: 20px;
+}
+
+.mentorship-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #1a365d;
+}
+
+.mentorship-filter select {
+    padding: 8px 12px;
+    border: 2px solid #3182ce;
+    border-radius: 6px;
+    background: white;
+    color: #1a365d;
+}
+
+/* Responsive design for Marco dashboard */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    
+    .nav-links {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .user-actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .logo {
+        order: 1;
+        margin-right: 0;
+    }
+    
+    .mentorship-container,
+    .learning-paths-container,
+    .experts-container,
+    .recommendations-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation for loading specific to Marco */
+@keyframes marco-pulse {
+    0% { background-color: #3182ce; }
+    50% { background-color: #4299e1; }
+    100% { background-color: #3182ce; }
+}
+
+.marco-section .loader {
+    border-top-color: #3182ce;
+    animation: spin 1s linear infinite, marco-pulse 2s ease-in-out infinite;
+}

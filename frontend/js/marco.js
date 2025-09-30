@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Process skills that users want to learn
         try {
             displaySkillsFrequency(users);
-            displayUsersAndGoals(users);
+            // Remove the detailed user display
+            // displayUsersAndGoals(users);
         } catch (displayError) {
             console.error('Error in display functions:', displayError);
             errorMessage.innerHTML = `<p>Error processing data: ${displayError.message}</p>`;
@@ -68,6 +69,15 @@ function displaySkillsFrequency(users) {
         const skillsWantContainer = document.getElementById('skillsWantContainer');
         const skillsList = document.getElementById('skillsList');
         
+        // Check if DOM elements exist
+        if (!skillsWantContainer || !skillsList) {
+            console.error('Required DOM elements not found:', {
+                skillsWantContainer: !!skillsWantContainer,
+                skillsList: !!skillsList
+            });
+            return;
+        }
+        
         // Count frequency of skills that users want to learn
         const skillsCount = {};
         const totalUsers = users.length;
@@ -75,7 +85,17 @@ function displaySkillsFrequency(users) {
         users.forEach(user => {
             console.log('Processing user:', user.first_name, 'Skills want:', user.skills_want);
             if (user.skills_want && user.skills_want.length > 0) {
-                user.skills_want.forEach(skill => {
+                // Handle both string and array formats
+                let skillsArray;
+                if (typeof user.skills_want === 'string') {
+                    skillsArray = user.skills_want.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                } else if (Array.isArray(user.skills_want)) {
+                    skillsArray = user.skills_want;
+                } else {
+                    skillsArray = [];
+                }
+                
+                skillsArray.forEach(skill => {
                     // Ensure skill is a string before calling trim
                     const skillStr = String(skill || '');
                     const normalizedSkill = skillStr.trim().toLowerCase();
@@ -88,37 +108,10 @@ function displaySkillsFrequency(users) {
         
         console.log('Skills count:', skillsCount);
         
-        if (Object.keys(skillsCount).length === 0) {
-            skillsList.innerHTML = '<p>No learning goals found among users.</p>';
-            skillsWantContainer.style.display = 'block';
-            return;
-        }
-        
-        // Sort skills by frequency
-        const sortedSkills = Object.entries(skillsCount)
-            .sort((a, b) => b[1] - a[1])
-            .map(([skill, count]) => ({
-                name: skill,
-                count: count,
-                percentage: Math.round((count / totalUsers) * 100)
-            }));
-        
-        console.log('Sorted skills:', sortedSkills);
-        
-        // Create skills grid - simplified version first
-        skillsList.innerHTML = '<h4>Most Wanted Skills:</h4>';
-        sortedSkills.forEach(skill => {
-            const skillName = String(skill.name || '').trim();
-            const displayName = skillName ? skillName.charAt(0).toUpperCase() + skillName.slice(1) : 'Unknown';
-            
-            skillsList.innerHTML += `<div style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px;">
-                <strong>${displayName}</strong> - 
-                ${skill.count} user${skill.count > 1 ? 's' : ''} want to learn this (${skill.percentage}%)
-            </div>`;
-        });
-        
+        // Just show the simple success message without detailed skills
+        skillsList.innerHTML = '';
         skillsWantContainer.style.display = 'block';
-        console.log('Skills frequency display completed');
+        console.log('Skills frequency display completed (simplified)');
     } catch (error) {
         console.error('Error in displaySkillsFrequency:', error);
         throw error;
@@ -127,17 +120,45 @@ function displaySkillsFrequency(users) {
 
 function displayUsersAndGoals(users) {
     console.log('Displaying users and goals...');
-    const usersContainer = document.getElementById('usersContainer');
-    const usersList = document.getElementById('usersList');
-    
-    usersList.innerHTML = '<h4>All Users:</h4>';
+    try {
+        const usersContainer = document.getElementById('usersContainer');
+        const usersList = document.getElementById('usersList');
+        
+        // Check if DOM elements exist
+        if (!usersContainer || !usersList) {
+            console.error('Required DOM elements not found:', {
+                usersContainer: !!usersContainer,
+                usersList: !!usersList
+            });
+            return;
+        }
+        
+        usersList.innerHTML = '<h4>All Users:</h4>';
     
     users.forEach(user => {
         const firstName = String(user.first_name || '').trim();
         const lastName = String(user.last_name || '').trim();
         const fullName = `${firstName} ${lastName}`.trim();
-        const skillsWant = user.skills_want || [];
-        const skillsHave = user.skills_have || [];
+        
+        // Handle skills_want (can be string or array)
+        let skillsWant = [];
+        if (user.skills_want) {
+            if (typeof user.skills_want === 'string') {
+                skillsWant = user.skills_want.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            } else if (Array.isArray(user.skills_want)) {
+                skillsWant = user.skills_want;
+            }
+        }
+        
+        // Handle skills_have (can be string or array)
+        let skillsHave = [];
+        if (user.skills_have) {
+            if (typeof user.skills_have === 'string') {
+                skillsHave = user.skills_have.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            } else if (Array.isArray(user.skills_have)) {
+                skillsHave = user.skills_have;
+            }
+        }
         
         usersList.innerHTML += `<div style="margin: 15px 0; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
             <h5>${fullName || 'Anonymous User'}</h5>
@@ -146,72 +167,10 @@ function displayUsersAndGoals(users) {
         </div>`;
     });
     
-    usersContainer.style.display = 'block';
-    console.log('Users and goals display completed');
-}
-
-function displaySkillsFrequency(skillsMap, container) {
-    // Sort skills by frequency (most wanted first)
-    const sortedSkills = Array.from(skillsMap.entries())
-        .sort((a, b) => b[1] - a[1]);
-    
-    let html = '<div class="skills-grid">';
-    
-    sortedSkills.forEach(([skill, count]) => {
-        const percentage = Math.round((count / skillsMap.size) * 100);
-        html += `
-            <div class="skill-card">
-                <div class="skill-name">${capitalizeFirst(skill)}</div>
-                <div class="skill-count">${count} user${count > 1 ? 's' : ''} want${count === 1 ? 's' : ''} to learn this</div>
-                <div class="skill-bar">
-                    <div class="skill-progress" style="width: ${percentage}%"></div>
-                </div>
-            </div>
-        `;
-    });
-    
-    html += '</div>';
-    container.innerHTML = html;
-}
-
-function displayUsersWithSkills(users, container) {
-    let html = '<div class="users-grid">';
-    
-    users.forEach(user => {
-        html += `
-            <div class="user-card">
-                <div class="user-header">
-                    <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
-                    <div class="user-name">${user.name}</div>
-                </div>
-                <div class="user-skills">
-                    <div class="skills-section">
-                        <h4>Wants to Learn:</h4>
-                        <div class="skills-tags">
-                            ${user.skills.map(skill => 
-                                `<span class="skill-tag want">${skill.trim()}</span>`
-                            ).join('')}
-                        </div>
-                    </div>
-                    ${user.skillsHave.length > 0 ? `
-                        <div class="skills-section">
-                            <h4>Can Teach:</h4>
-                            <div class="skills-tags">
-                                ${user.skillsHave.map(skill => 
-                                    `<span class="skill-tag have">${skill.trim()}</span>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-    });
-    
-    html += '</div>';
-    container.innerHTML = html;
-}
-
-function capitalizeFirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+        usersContainer.style.display = 'block';
+        console.log('Users and goals display completed');
+    } catch (error) {
+        console.error('Error in displayUsersAndGoals:', error);
+        throw error;
+    }
 }
