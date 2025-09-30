@@ -61,14 +61,14 @@ echo ""
 echo -e "${BLUE}📱 Mobile Access URLs:${NC}"
 echo ""
 echo -e "${GREEN}🏠 Main Pages:${NC}"
-echo "   Landing Page:      http://$LOCAL_IP:8001/frontend/index.html"
-echo "   Sign Up:           http://$LOCAL_IP:8001/frontend/signup.html"
-echo "   Login:             http://$LOCAL_IP:8001/frontend/login.html"
+echo "   Landing Page:      http://$LOCAL_IP:8001/index.html"
+echo "   Sign Up:           http://$LOCAL_IP:8001/signup.html"
+echo "   Login:             http://$LOCAL_IP:8001/login.html"
 echo ""
 echo -e "${GREEN}📊 Dashboards:${NC}"
-echo "   Main Dashboard:    http://$LOCAL_IP:8001/frontend/dashboard.html"
-echo "   Marco Dashboard:   http://$LOCAL_IP:8001/frontend/marco-dashboard.html"
-echo "   Micro Dashboard:   http://$LOCAL_IP:8001/frontend/micro-dashboard.html"
+echo "   Main Dashboard:    http://$LOCAL_IP:8001/dashboard.html"
+echo "   Marco Dashboard:   http://$LOCAL_IP:8001/marco-dashboard.html"
+echo "   Micro Dashboard:   http://$LOCAL_IP:8001/micro-dashboard.html"
 echo ""
 echo -e "${GREEN}🔧 API Endpoints:${NC}"
 echo "   Users API:         http://$LOCAL_IP:8001/api/users"
@@ -88,16 +88,16 @@ fi
 echo ""
 echo -e "${YELLOW}📋 Mobile Testing Checklist:${NC}"
 echo "   1. Make sure your mobile is on the same WiFi network"
-echo "   2. Try opening: http://$LOCAL_IP:8001/frontend/index.html"
+echo "   2. Try opening: http://$LOCAL_IP:8001/index.html"
 echo "   3. If it doesn't work, check firewall settings"
 echo "   4. Try these alternative IPs:"
-ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print "      http://" $2 ":8001/frontend/index.html"}'
+ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print "      http://" $2 ":8001/index.html"}'
 echo ""
 
 # QR Code generation (if qrencode is available)
 if command -v qrencode >/dev/null 2>&1; then
     echo -e "${BLUE}📱 QR Code for easy mobile access:${NC}"
-    echo "http://$LOCAL_IP:8001/frontend/index.html" | qrencode -t UTF8
+    echo "http://$LOCAL_IP:8001/index.html" | qrencode -t UTF8
     echo ""
 fi
 

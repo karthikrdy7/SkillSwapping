@@ -150,15 +150,15 @@ Backend API:    http://127.0.0.1:5001
 Frontend App:   http://127.0.0.1:8001
 
 Main Pages:
-• Landing Page:    http://127.0.0.1:8001/frontend/index.html
-• Sign Up:         http://127.0.0.1:8001/frontend/signup.html  
-• Login:           http://127.0.0.1:8001/frontend/login.html
+• Landing Page:    http://127.0.0.1:8001/index.html
+• Sign Up:         http://127.0.0.1:8001/signup.html  
+• Login:           http://127.0.0.1:8001/login.html
 
 Dashboards:
-• Main Dashboard:  http://127.0.0.1:8001/frontend/dashboard.html
-• Marco Dashboard: http://127.0.0.1:8001/frontend/marco-dashboard.html
-• Micro Dashboard: http://127.0.0.1:8001/frontend/micro-dashboard.html
-• Admin Panel:     http://127.0.0.1:8001/frontend/admin.html
+• Main Dashboard:  http://127.0.0.1:8001/dashboard.html
+• Marco Dashboard: http://127.0.0.1:8001/marco-dashboard.html
+• Micro Dashboard: http://127.0.0.1:8001/micro-dashboard.html
+• Admin Panel:     http://127.0.0.1:8001/admin.html
 ```
 
 ### 📱 Mobile Access (Same WiFi Network)
@@ -167,13 +167,13 @@ Dashboards:
 Frontend App:   http://[YOUR-IP]:8001
 
 Main Pages:
-• Landing Page:    http://[YOUR-IP]:8001/frontend/index.html
-• Sign Up:         http://[YOUR-IP]:8001/frontend/signup.html
-• Login:           http://[YOUR-IP]:8001/frontend/login.html
+• Landing Page:    http://[YOUR-IP]:8001/index.html
+• Sign Up:         http://[YOUR-IP]:8001/signup.html
+• Login:           http://[YOUR-IP]:8001/login.html
 
 Dashboards:  
-• Marco Dashboard: http://[YOUR-IP]:8001/frontend/marco-dashboard.html
-• Micro Dashboard: http://[YOUR-IP]:8001/frontend/micro-dashboard.html
+• Marco Dashboard: http://[YOUR-IP]:8001/marco-dashboard.html
+• Micro Dashboard: http://[YOUR-IP]:8001/micro-dashboard.html
 ```
 
 ## 📱 Mobile Access Setup
@@ -189,7 +189,7 @@ Dashboards:
 3. **On your mobile device:**
    - Connect to the same WiFi network
    - Open any browser  
-   - Go to: `http://[IP-ADDRESS]:8001/frontend/index.html`
+   - Go to: `http://[IP-ADDRESS]:8001/index.html`
 
 ### Test Mobile Access
 ```bash
@@ -439,9 +439,9 @@ python backend/count_users.py
 ```
 
 ### Key URLs
-- **Main App**: http://127.0.0.1:8001/frontend/index.html
-- **Marco Dashboard**: http://127.0.0.1:8001/frontend/marco-dashboard.html
-- **Micro Dashboard**: http://127.0.0.1:8001/frontend/micro-dashboard.html
+- **Main App**: http://127.0.0.1:8001/index.html
+- **Marco Dashboard**: http://127.0.0.1:8001/marco-dashboard.html
+- **Micro Dashboard**: http://127.0.0.1:8001/micro-dashboard.html
 - **API**: http://127.0.0.1:8001/api/users
 
 ### Default Ports
@@ -462,7 +462,7 @@ If you see this in your terminal after running `./start-all.sh`:
 
 **You're ready to go!** 🚀
 
-Open http://127.0.0.1:8001/frontend/index.html and start skill swapping!
+Open http://127.0.0.1:8001/index.html and start skill swapping!
 
 ---
 
