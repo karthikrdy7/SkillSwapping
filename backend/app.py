@@ -41,10 +41,15 @@ init_db()
 # Serve static files (HTML, CSS, JS)
 @app.route('/')
 def serve_index():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(os.path.join(app.static_folder, 'frontend'), 'index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
+    # First try to serve from frontend directory
+    frontend_path = os.path.join(app.static_folder, 'frontend', filename)
+    if os.path.exists(frontend_path):
+        return send_from_directory(os.path.join(app.static_folder, 'frontend'), filename)
+    # Fallback to root static folder
     return send_from_directory(app.static_folder, filename)
 
 # Example API endpoint
@@ -100,8 +105,34 @@ def login():
 @app.route('/api/users', methods=['GET'])
 def get_users():
     with get_db_connection() as conn:
-        users = conn.execute('SELECT id, username FROM users').fetchall()
-        return jsonify([dict(u) for u in users])
+        users = conn.execute('''
+            SELECT id, username, first_name, last_name, preferred_language, 
+                   skills_have, skills_want, created_at 
+            FROM users
+        ''').fetchall()
+        user_list = []
+        for user in users:
+            user_dict = dict(user)
+            # Convert skills from comma-separated strings to arrays
+            if user_dict['skills_have']:
+                user_dict['skills_have'] = user_dict['skills_have'].split(',')
+            else:
+                user_dict['skills_have'] = []
+            
+            if user_dict['skills_want']:
+                user_dict['skills_want'] = user_dict['skills_want'].split(',')
+            else:
+                user_dict['skills_want'] = []
+                
+            user_list.append(user_dict)
+        return jsonify(user_list)
+
+# Get user count
+@app.route('/api/users/count', methods=['GET'])
+def get_user_count():
+    with get_db_connection() as conn:
+        count = conn.execute('SELECT COUNT(*) FROM users').fetchone()[0]
+        return jsonify({'count': count, 'message': f'Total registered users: {count}'})
 
 # Example: Hello endpoint
 @app.route('/api/hello')
