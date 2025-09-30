@@ -65,6 +65,17 @@ except:
     echo "$ip"
 }
 
+# Function to kill process on port
+kill_port() {
+    local port=$1
+    local pids=$(lsof -ti:$port 2>/dev/null)
+    if [ ! -z "$pids" ]; then
+        echo -e "${YELLOW}⚠️  Killing existing processes on port $port...${NC}"
+        echo "$pids" | xargs kill -9 2>/dev/null || true
+        sleep 2
+    fi
+}
+
 # Check and kill existing processes
 echo -e "${YELLOW}🔍 Checking for existing processes...${NC}"
 kill_port 5001
