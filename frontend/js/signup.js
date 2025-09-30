@@ -58,12 +58,11 @@ function checkDeviceBinding() {
 }
 
 // Hash password function
+// Simple password hashing function for mobile compatibility
 async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // For demo purposes, we'll use a simple hash
+    // In production, this should be done server-side
+    return btoa(password + 'skillswap_salt').replace(/[^a-zA-Z0-9]/g, '');
 }
 
 // Validation functions
@@ -267,7 +266,7 @@ if (signupForm) {
                 createdAt: new Date().toISOString()
             };
             // Send to backend
-            const response = await fetch('http://127.0.0.1:5001/api/users', {
+            const response = await fetch('/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -280,7 +279,7 @@ if (signupForm) {
                 document.getElementById('successMessage').style.display = 'block';
                 document.getElementById('submitBtn').disabled = true;
                 // Log in user using backend login API
-                const loginResponse = await fetch('http://127.0.0.1:5001/api/login', {
+                const loginResponse = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: email, password: hashedPassword })

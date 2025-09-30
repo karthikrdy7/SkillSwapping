@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwapping Live Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎯 SkillSwapping Live Dashboard</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="activeUsers">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="liveMatches">0</span>
+                    <span class="stat-label">Live Exchanges</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalOpportunities">0</span>
+                    <span class="stat-label">Total Opportunities</span>
+                </div>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">🔄 Refresh</button>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loader"></div>
+                <p>Loading live dashboard data...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-message" style="display: none;">
+                <h3>❌ Error Loading Data</h3>
+                <p id="errorText">Unable to fetch dashboard data</p>
+                <button onclick="loadDashboard()" class="retry-btn">Try Again</button>
+            </div>
+
+            <!-- Active Users Section -->
+            <section id="activeUsersSection" class="section" style="display: none;">
+                <h2>🟢 Currently Active Users</h2>
+                <div id="activeUsersList" class="users-grid">
+                    <!-- Active users will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Live Matches Section -->
+            <section id="liveMatchesSection" class="section" style="display: none;">
+                <h2>🔥 Perfect Live Matches</h2>
+                <div id="liveMatchesList" class="matches-container">
+                    <!-- Live matches will be loaded here -->
+                </div>
+            </section>
+
+            <!-- One-way Opportunities Section -->
+            <section id="oneWaySection" class="section" style="display: none;">
+                <h2>➡️ One-Way Teaching Opportunities</h2>
+                <div id="oneWayList" class="opportunities-container">
+                    <!-- One-way opportunities will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Summary Section -->
+            <section id="summarySection" class="section" style="display: none;">
+                <h2>🎉 Summary</h2>
+                <div id="summaryContent" class="summary-content">
+                    <!-- Summary will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

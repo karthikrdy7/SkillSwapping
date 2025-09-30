@@ -22,7 +22,29 @@
         <section class="learning-section">
             <h2>Macro Learning</h2>
             <p>Welcome to Macro Learning! Here you'll find comprehensive courses and deep dives to master new subjects.</p>
-            <div id="skillsWantContainer" style="margin: 20px 0;"></div>
+            
+            <!-- Loading indicator -->
+            <div id="loadingIndicator" style="text-align: center; margin: 20px 0;">
+                <p>Loading skills data...</p>
+            </div>
+            
+            <!-- Skills that users want to learn -->
+            <div id="skillsWantContainer" style="margin: 20px 0; display: none;">
+                <h3>Skills That Users Want to Learn</h3>
+                <div id="skillsList"></div>
+            </div>
+            
+            <!-- User skills display -->
+            <div id="usersContainer" style="margin: 20px 0; display: none;">
+                <h3>All Users and Their Learning Goals</h3>
+                <div id="usersList"></div>
+            </div>
+            
+            <!-- Error message -->
+            <div id="errorMessage" style="margin: 20px 0; display: none; color: red;">
+                <p>Error loading data. Please make sure the backend server is running.</p>
+            </div>
+            
             <a href="learning.html">&#8592; Back to Learning</a>
         </section>
     </main>

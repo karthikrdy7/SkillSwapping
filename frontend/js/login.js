@@ -21,12 +21,11 @@ function generateDeviceFingerprint() {
 const deviceFingerprint = generateDeviceFingerprint();
 
 // Hash password function
+// Simple password hashing function for mobile compatibility
 async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // For demo purposes, we'll use a simple hash
+    // In production, this should be done server-side
+    return btoa(password + 'skillswap_salt').replace(/[^a-zA-Z0-9]/g, '');
 }
 
 // Validation functions
@@ -73,7 +72,7 @@ function showLoading(show) {
 async function loginUser(email, password, rememberMe) {
     const hashedPassword = await hashPassword(password);
     // Send login request to backend
-    const response = await fetch('http://127.0.0.1:5001/api/login', {
+    const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
