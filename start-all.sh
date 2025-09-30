@@ -29,21 +29,50 @@ check_port() {
     fi
 }
 
-# Function to kill process on port
-kill_port() {
-    local port=$1
-    local pids=$(lsof -ti:$port 2>/dev/null)
-    if [ ! -z "$pids" ]; then
-        echo -e "${YELLOW}⚠️  Killing existing processes on port $port...${NC}"
-        echo "$pids" | xargs kill -9 2>/dev/null || true
-        sleep 2
+# Function to get local IP address
+get_local_ip() {
+    # Try different methods to get the local IP
+    local ip=""
+    
+    # Method 1: Use route command (works on macOS/Linux)
+    if command -v route >/dev/null 2>&1; then
+        ip=$(route get default | grep interface | awk '{print $2}' | head -1)
+        if [ ! -z "$ip" ]; then
+            ip=$(ifconfig "$ip" | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
+        fi
     fi
+    
+    # Method 2: Use ifconfig directly
+    if [ -z "$ip" ]; then
+        ip=$(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | grep -E '192\.168\.|10\.|172\.' | awk '{print $2}' | head -1)
+    fi
+    
+    # Method 3: Fallback - try to connect to external server
+    if [ -z "$ip" ]; then
+        ip=$(python3 -c "
+import socket
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('8.8.8.8', 80))
+    ip = s.getsockname()[0]
+    s.close()
+    print(ip)
+except:
+    print('192.168.1.100')
+" 2>/dev/null)
+    fi
+    
+    echo "$ip"
 }
 
 # Check and kill existing processes
 echo -e "${YELLOW}🔍 Checking for existing processes...${NC}"
 kill_port 5001
 kill_port 8001
+
+# Get local IP for mobile access
+LOCAL_IP=$(get_local_ip)
+echo -e "${BLUE}📡 Local IP Address: $LOCAL_IP${NC}"
 
 # Activate virtual environment if it exists
 if [ -d "$PROJECT_ROOT/.venv" ]; then
@@ -130,25 +159,45 @@ echo ""
 echo -e "${BLUE}🎉 SkillSwapping Application Started Successfully!${NC}"
 echo "=============================================="
 echo ""
-echo -e "${GREEN}📊 Backend API:${NC}     http://127.0.0.1:5001"
-echo -e "${GREEN}🌐 Frontend App:${NC}    http://127.0.0.1:8001"
+echo -e "${GREEN}📊 Backend API:${NC}     http://127.0.0.1:5001 (Local)"
+echo -e "${GREEN}                      http://$LOCAL_IP:5001 (Mobile/Network)"
+echo -e "${GREEN}🌐 Frontend App:${NC}    http://127.0.0.1:8001 (Local)"
+echo -e "${GREEN}                      http://$LOCAL_IP:8001 (Mobile/Network)"
 echo ""
-echo -e "${BLUE}📱 Available Pages:${NC}"
+echo -e "${BLUE}📱 Available Pages (Mobile Access):${NC}"
+echo "   • Landing Page:     http://$LOCAL_IP:8001/frontend/index.html"
+echo "   • Sign Up:          http://$LOCAL_IP:8001/frontend/signup.html"
+echo "   • Login:            http://$LOCAL_IP:8001/frontend/login.html"
+echo "   • Home Dashboard:   http://$LOCAL_IP:8001/frontend/home.html"
+echo "   • Learning:         http://$LOCAL_IP:8001/frontend/learning.html"
+echo "   • Main Dashboard:   http://$LOCAL_IP:8001/frontend/dashboard.html"
+echo "   • Marco Dashboard:  http://$LOCAL_IP:8001/frontend/marco-dashboard.html"
+echo "   • Micro Dashboard:  http://$LOCAL_IP:8001/frontend/micro-dashboard.html"
+echo "   • Admin Panel:      http://$LOCAL_IP:8001/frontend/admin.html"
+echo ""
+echo -e "${BLUE}💻 Local Access Pages:${NC}"
 echo "   • Landing Page:     http://127.0.0.1:8001/frontend/index.html"
-echo "   • Sign Up:          http://127.0.0.1:8001/frontend/signup.html"
-echo "   • Login:            http://127.0.0.1:8001/frontend/login.html"
-echo "   • Home Dashboard:   http://127.0.0.1:8001/frontend/home.html"
-echo "   • Learning:         http://127.0.0.1:8001/frontend/learning.html"
-echo "   • Main Dashboard:   http://127.0.0.1:8001/frontend/dashboard.html"
 echo "   • Marco Dashboard:  http://127.0.0.1:8001/frontend/marco-dashboard.html"
 echo "   • Micro Dashboard:  http://127.0.0.1:8001/frontend/micro-dashboard.html"
-echo "   • Admin Panel:      http://127.0.0.1:8001/frontend/admin.html"
 echo ""
 echo -e "${BLUE}🔧 API Endpoints:${NC}"
 echo "   • GET  /api/users     - Get all users"
 echo "   • POST /api/users     - Register new user"
 echo "   • POST /api/login     - User login"
 echo "   • GET  /api/dashboard - Dashboard data"
+echo ""
+echo -e "${YELLOW}📱 Mobile Setup Instructions:${NC}"
+echo "   1. Make sure your mobile device is on the same WiFi network"
+echo "   2. Open any browser on your mobile device"
+echo "   3. Go to: http://$LOCAL_IP:8001/frontend/index.html"
+echo "   4. If it doesn't work, try these alternative IPs:"
+echo "      $(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print "      http://" $2 ":8001/frontend/index.html"}')"
+echo ""
+echo -e "${YELLOW}🔐 Network Troubleshooting:${NC}"
+echo "   • Check firewall settings (allow ports 5001, 8001)"
+echo "   • Ensure both devices are on same WiFi network"
+echo "   • Try disabling VPN if enabled"
+echo "   • On macOS: System Preferences → Security & Privacy → Firewall"
 echo ""
 echo -e "${YELLOW}📋 Process Information:${NC}"
 echo "   • Backend PID:  $BACKEND_PID"

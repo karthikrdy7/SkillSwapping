@@ -2,8 +2,10 @@
 
 class DashboardManager {
     constructor() {
-        this.apiUrl = 'http://127.0.0.1:8001/api';
+        // Use relative URL so it works from any host (localhost, IP address, etc.)
+        this.apiUrl = '/api';
         this.refreshInterval = null;
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
         this.init();
     }
 

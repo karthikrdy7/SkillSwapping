@@ -13,14 +13,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     loadingIndicator.innerHTML = '<p>JavaScript is working! Fetching data...</p>';
     
     try {
-        // Show loading indicator
-        loadingIndicator.style.display = 'block';
-        console.log('Fetching from /api/users...');
-        
-        // Fetch all users from backend
-        const response = await fetch('http://127.0.0.1:8001/api/users');
-        console.log('Response status:', response.status);
-        
+        console.log('Fetching users data...');
+        const response = await fetch('/api/users');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
