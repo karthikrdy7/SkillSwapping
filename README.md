@@ -1,22 +1,23 @@
 # 🎓 SkillSwapping - Professional Skill Exchange Platform
 
-A web application that connects professionals who want to teach and learn skills from each other. Users can register with their existing skills and skills they want to learn, and the platform helps match them with complementary users for skill exchange.
+A comprehensive web application that connects professionals who want to teach and learn skills from each other. Users can register with their existing skills and skills they want to learn, and the platform helps match them with complementary users for skill exchange.
 
 ## 🚀 Quick Start
 
-### Start Everything (Recommended)
+### ⚡ One-Command Launch (NEW!)
 ```bash
-scripts/start-all.sh
+./scripts/launch-all.sh
 ```
+**Starts everything + real-time monitoring + mobile testing**
 
 ### Stop Everything
 ```bash
-scripts/stop-all.sh
+./scripts/stop-all.sh
 ```
 
-### Test Mobile Access
+### Diagnose User Issues
 ```bash
-scripts/test-mobile.sh
+./scripts/diagnose-user.sh username [password]
 ```
 
 ## 📋 Table of Contents
@@ -36,52 +37,66 @@ scripts/test-mobile.sh
 ## ✨ Features
 
 ### 🎯 Core Features
-- **User Registration & Authentication** - Secure user accounts with skill profiles
+- **Secure Authentication** - bcrypt password hashing with session management
+- **User Registration & Profiles** - Complete skill profiles with secure login
 - **Skill Matching** - Intelligent matching between skill teachers and learners
+- **Real-time User Monitoring** - Live active user tracking and analytics
 - **Dual Learning Modes** - Marco (comprehensive) and Micro (quick) learning paths
-- **Real-time Dashboard** - Live statistics and user activity monitoring
-- **Mobile Responsive** - Works perfectly on desktop and mobile devices
-- **Cross-platform API** - RESTful API for all operations
+- **Mobile-First Design** - Responsive design with automatic mobile testing
+- **Cross-platform API** - RESTful API accessible from any device
+
+### 🛠️ Enhanced Tools (NEW!)
+- **Comprehensive Launcher** - Single script runs everything with monitoring
+- **Mobile Connectivity Testing** - Automatic network accessibility validation
+- **User Diagnosis Tools** - Complete login troubleshooting and debugging
+- **Authentication Repair** - Password security migration and fixes
+- **Session Management** - Prevents duplicate sessions and handles cleanup
+- **Real-time Dashboard** - Live user count with auto-refresh monitoring
 
 ### 📊 Learning Dashboards
 - **Marco Learning Dashboard** - For comprehensive, long-term skill development
 - **Micro Learning Dashboard** - For quick, bite-sized learning sessions
-- **Main Dashboard** - Overview of all platform activity
+- **Main Dashboard** - Overview of all platform activity with real-time stats
 - **Admin Panel** - User management and system administration
 
 ## 📁 Project Structure
 
 ```
 skillswapping/
-├── � README.md                 # This file
-├── 📋 PROJECT_OVERVIEW.md       # Detailed project documentation
-├── 📝 SCRIPTS_README.md         # Script documentation
+├── 📝 README.md                 # This file - Complete usage guide
+├── 📋 PROJECT_OVERVIEW.md       # Detailed technical documentation  
+├── � SECURITY_UPGRADE_SUMMARY.md # Security enhancements log
+├── �📝 SCRIPTS_README.md         # Detailed script documentation
 ├──
-├── scripts/                     # Shell scripts for automation
-│   ├── 🚀 start-all.sh         # Start both servers (MAIN SCRIPT)
-│   ├── 🛑 stop-all.sh          # Stop all servers
-│   ├── 📱 test-mobile.sh       # Test mobile access
-│   ├── run-active-users.sh     # Run active users analysis
-│   ├── check_users.sh          # Check user data
-│   ├── quick_stats.sh          # Quick user statistics
-│   └── run.sh                  # Legacy backend script
+├── scripts/                     # Enhanced automation scripts
+│   ├── 🚀 launch-all.sh         # MAIN SCRIPT - Everything in one!
+│   ├── 🛑 stop-all.sh          # Stop all servers gracefully
+│   ├── � diagnose-user.sh     # User login troubleshooting
+│   ├── 🔧 fix-auth.sh          # Authentication repair tool
+│   ├── 📊 run-active-users.sh  # Active users analysis with filtering
+│   ├── 📈 quick_stats.sh       # Quick user statistics
+│   ├── 👥 check_users.sh       # User database inspection
+│   ├── ⚡ run-parallel.sh      # Parallel script execution
+│   └── 📱 test-mobile.sh       # Mobile connectivity testing
 ├──
 ├── backend/                     # Flask backend application
-│   ├── app.py                  # Main Flask server (Port 5001)
-│   ├── simple_server.py        # Frontend server (Port 8001)
+│   ├── app.py                  # Main Flask API server (Port 5001)
+│   ├── simple_server.py        # Frontend HTTP server (Port 8001)
+│   ├── secure_auth.py          # Secure authentication system
+│   ├── session_manager.py      # Session tracking and cleanup
 │   ├── app.db                  # SQLite database
 │   ├── requirements.txt        # Python dependencies
-│   └── [utilities...]          # Database management scripts
+│   └── [utilities...]          # Enhanced database tools
 ├──
 ├── frontend/                    # Static frontend files
 │   ├── index.html              # Landing page
 │   ├── signup.html             # User registration
-│   ├── login.html              # User authentication
-│   ├── dashboard.html          # Main dashboard
-│   ├── marco-dashboard.html    # Comprehensive learning
-│   ├── micro-dashboard.html    # Quick learning
-│   ├── css/                    # Stylesheets
-│   ├── js/                     # JavaScript files
+│   ├── login.html              # User authentication  
+│   ├── dashboard.html          # Main dashboard with real-time data
+│   ├── marco-dashboard.html    # Comprehensive learning interface
+│   ├── micro-dashboard.html    # Quick learning interface
+│   ├── css/                    # Enhanced responsive stylesheets
+│   ├── js/                     # JavaScript with secure authentication
 │   └── assets/                 # Images and resources
 └──
 └── .venv/                      # Python virtual environment
@@ -113,38 +128,51 @@ skillswapping/
 
 ## 🚀 Running the Application
 
-### Method 1: One-Command Start (Recommended)
+### ⚡ Method 1: Comprehensive Launcher (RECOMMENDED)
 ```bash
-scripts/start-all.sh
+./scripts/launch-all.sh
 ```
-**This will:**
-- ✅ Activate virtual environment
-- ✅ Kill any existing processes on ports 5001/8001
-- ✅ Start Flask backend (port 5001)
-- ✅ Start frontend server (port 8001)  
-- ✅ Display all access URLs (local + mobile)
-- ✅ Monitor both processes
-- ✅ Handle graceful shutdown with Ctrl+C
+**This single script does EVERYTHING:**
+- ✅ Stops any existing servers (clean startup)
+- ✅ Activates virtual environment automatically
+- ✅ Starts Flask backend (port 5001) with security checks
+- ✅ Starts frontend server (port 8001) 
+- ✅ **Tests mobile connectivity** (automatic network testing)
+- ✅ **Real-time user monitoring** (live count updates every 5 seconds)
+- ✅ Shows all access URLs (local + mobile)
+- ✅ Handles graceful shutdown with Ctrl+C
+- ✅ **Built-in diagnostics** and troubleshooting
 
-### Method 2: Manual Start
+### Method 2: Individual Component Control
 ```bash
-# Terminal 1 - Backend
-cd backend
-source ../.venv/bin/activate
-python app.py
+# Start backend only
+cd backend && python app.py
 
-# Terminal 2 - Frontend  
-cd backend
-python simple_server.py
+# Start frontend only  
+cd backend && python simple_server.py
+
+# Stop everything
+./scripts/stop-all.sh
+```
+
+### Real-time Monitoring
+The main launcher includes **live user count monitoring**:
+```
+📊 Real-time User Count Monitor is running below:
+🔄 Updates every 5 seconds
+
+[12:30:15] 📊 Active Users: 1
+[12:30:20] 📊 Active Users: 2  
+[12:30:25] 📊 Active Users: 1
 ```
 
 ### Stopping the Application
 ```bash
-# Quick stop
-scripts/stop-all.sh
+# Quick stop all services
+./scripts/stop-all.sh
 
-# Or use Ctrl+C in the scripts/start-all.sh terminal
-# Or kill specific processes: kill [PID]
+# Or use Ctrl+C in the launch-all.sh terminal
+# Individual process kill: kill [PID]
 ```
 
 ## 🌐 Access URLs
@@ -183,28 +211,49 @@ Dashboards:
 
 ## 📱 Mobile Access Setup
 
+### 🚀 Automatic Mobile Testing (NEW!)
+The main launcher now **automatically tests mobile connectivity**:
+```bash
+./scripts/launch-all.sh
+```
+
+**Sample Mobile Test Output:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 Testing Mobile Connectivity...
+🌐 Network IP: 192.168.1.100
+🔧 Testing Backend API (Port 5001)...
+✅ Backend API accessible from network
+🌐 Testing Frontend Server (Port 8001)...
+✅ Frontend accessible from network
+📱 Testing Mobile Pages...
+  ✅ index.html accessible
+  ✅ login.html accessible  
+  ✅ signup.html accessible
+  ✅ dashboard.html accessible
+📊 Mobile Accessibility: 4/4 pages accessible
+🎉 All mobile pages are accessible!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
 ### Quick Mobile Setup
 1. **Start the servers**
    ```bash
-   scripts/start-all.sh
+   ./scripts/launch-all.sh
    ```
    
-2. **Note the IP address** shown in the output (e.g., 192.168.4.41)
+2. **Note the IP address** shown in the output (e.g., 192.168.1.100)
 
 3. **On your mobile device:**
    - Connect to the same WiFi network
    - Open any browser  
    - Go to: `http://[IP-ADDRESS]:8001/index.html`
 
-### Test Mobile Access
+### Manual Mobile Testing
 ```bash
-scripts/test-mobile.sh
+./scripts/test-mobile.sh
 ```
-This will:
-- ✅ Detect your local IP address
-- ✅ Test port accessibility  
-- ✅ Show all mobile URLs
-- ✅ Provide troubleshooting tips
+This provides detailed mobile connectivity analysis and troubleshooting.
 
 ### Mobile Troubleshooting
 If mobile access doesn't work:
@@ -326,71 +375,95 @@ The SQLite database (`backend/app.db`) contains:
 
 ## 🔍 Troubleshooting
 
+### 🛠️ Enhanced Diagnostic Tools (NEW!)
+
+#### User Login Issues
+```bash
+# Comprehensive user diagnosis
+./scripts/diagnose-user.sh username [password]
+
+# Example: Check if userreddy can login
+./scripts/diagnose-user.sh userreddy 06userreddy
+```
+**This will:**
+- ✅ Check if user exists in database
+- ✅ Verify password security (bcrypt vs plain text)
+- ✅ Show session history and current status
+- ✅ Test actual login API call
+- ✅ Provide specific fix suggestions
+
+#### Authentication & Security Issues
+```bash
+# Fix password security (migrate to bcrypt)
+./scripts/fix-auth.sh
+
+# Check active users with filtering
+./scripts/run-active-users.sh recent 5    # Last 5 minutes
+./scripts/run-active-users.sh all         # All users
+```
+
+#### Mobile Connectivity Issues
+Mobile testing is now **built into the main launcher**, but you can also run:
+```bash
+./scripts/test-mobile.sh
+```
+
 ### Common Issues
 
 #### "Port already in use"
 ```bash
-# Check what's using the ports
-lsof -i :5001
-lsof -i :8001
-
-# Stop all and restart
-scripts/stop-all.sh
-scripts/start-all.sh
+# Stop all services and restart
+./scripts/stop-all.sh
+./scripts/launch-all.sh
 ```
 
-#### "Virtual environment not found"
+#### "User login failed" 
 ```bash
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r backend/requirements.txt
+# Diagnose specific user
+./scripts/diagnose-user.sh username password
+
+# Fix authentication system
+./scripts/fix-auth.sh
 ```
 
-#### "Backend failed to start"
+#### "Backend/Frontend failed to start"
 ```bash
-# Check backend log
+# Check logs (auto-generated by launch-all.sh)
 cat backend.log
-
-# Try manual start for debugging
-cd backend
-python app.py
-```
-
-#### "Frontend failed to start"  
-```bash
-# Check frontend log
 cat frontend.log
 
-# Try manual start
-cd backend
-python simple_server.py
+# Manual debugging
+cd backend && python app.py
 ```
 
-#### "Mobile access not working"
+#### "Duplicate sessions" or "Session management issues"
+The latest version includes **automatic session cleanup** that prevents duplicate sessions. If you still experience issues:
 ```bash
-# Test mobile access
-scripts/test-mobile.sh
-
-# Check firewall settings
-# Verify same WiFi network
-# Try different IP addresses shown in output
+# Clear all sessions for a user
+python3 -c "
+import sqlite3
+conn = sqlite3.connect('backend/app.db')
+conn.execute('UPDATE user_sessions SET is_active = 0 WHERE user_id = (SELECT id FROM users WHERE username = \"USERNAME\")')
+conn.execute('UPDATE users SET is_online = 0 WHERE username = \"USERNAME\"')
+conn.commit()
+print('✅ Cleared all sessions')
+"
 ```
 
-### Log Files
-- `backend.log` - Backend server logs
-- `frontend.log` - Frontend server logs
-
-### Process Management
+### Log Files & Process Management
 ```bash
+# View real-time logs
+tail -f backend.log
+tail -f frontend.log
+
 # Check running processes
 ps aux | grep python
 
 # Kill specific process
 kill [PID]
 
-# Kill all SkillSwapping processes
-scripts/stop-all.sh
+# Complete cleanup
+./scripts/stop-all.sh
 ```
 
 ## 👨‍💻 Development
@@ -427,20 +500,26 @@ scripts/stop-all.sh
 
 ### Essential Commands
 ```bash
-# Start everything
-scripts/start-all.sh
+# Start everything with monitoring + mobile testing
+./scripts/launch-all.sh
 
 # Stop everything  
-scripts/stop-all.sh
+./scripts/stop-all.sh
 
-# Test mobile access
-scripts/test-mobile.sh
+# Diagnose user login issues
+./scripts/diagnose-user.sh username [password]
 
-# View users
-python backend/view_users.py
+# Fix authentication/security
+./scripts/fix-auth.sh
 
-# Check user count
-python backend/count_users.py
+# Check active users (with time filtering)
+./scripts/run-active-users.sh recent 5
+
+# Quick user statistics
+./scripts/quick_stats.sh
+
+# Test mobile connectivity
+./scripts/test-mobile.sh
 ```
 
 ### Key URLs
@@ -457,18 +536,43 @@ python backend/count_users.py
 
 ## 🎉 Success!
 
-If you see this in your terminal after running `scripts/start-all.sh`:
+If you see this in your terminal after running `./scripts/launch-all.sh`:
 
 ```
 🎉 SkillSwapping Application Started Successfully!
+==============================================
+
 📊 Backend API:     http://127.0.0.1:5001 (Local)
+                      http://192.168.1.100:5001 (Mobile/Network)
 🌐 Frontend App:    http://127.0.0.1:8001 (Local)
+                      http://192.168.1.100:8001 (Mobile/Network)
+
+📱 Quick Access URLs:
+   • Landing Page:     http://192.168.1.100:8001/index.html
+   • Sign Up:          http://192.168.1.100:8001/signup.html
+   • Login:            http://192.168.1.100:8001/login.html
+   • Dashboard:        http://192.168.1.100:8001/dashboard.html
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 Testing Mobile Connectivity...
+🎉 All mobile pages are accessible!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Real-time User Count Monitor is running below:
+🔄 Updates every 5 seconds
+🛑 Press Ctrl+C to stop all services
+
+[12:30:15] 📊 Active Users: 0
 ```
 
 **You're ready to go!** 🚀
 
-Open http://127.0.0.1:8001/index.html and start skill swapping!
+**Desktop**: Open http://127.0.0.1:8001/index.html  
+**Mobile**: Open http://[YOUR-IP]:8001/index.html  
+
+Start skill swapping! 📚✨
 
 ---
 
-**Made with ❤️ for professional skill exchange**
+**Made with ❤️ for professional skill exchange**  
+**Enhanced with 🔐 security, 📱 mobile testing, and 📊 real-time monitoring**
