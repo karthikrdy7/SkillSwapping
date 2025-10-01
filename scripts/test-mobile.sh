@@ -71,18 +71,28 @@ echo "   Marco Dashboard:   http://$LOCAL_IP:8001/marco-dashboard.html"
 echo "   Micro Dashboard:   http://$LOCAL_IP:8001/micro-dashboard.html"
 echo ""
 echo -e "${GREEN}🔧 API Endpoints:${NC}"
-echo "   Users API:         http://$LOCAL_IP:8001/api/users"
-echo "   Dashboard API:     http://$LOCAL_IP:8001/api/dashboard"
+echo "   Users API:         http://$LOCAL_IP:5001/api/users"
+echo "   Login API:         http://$LOCAL_IP:5001/api/login"
+echo "   Dashboard API:     http://$LOCAL_IP:5001/api/dashboard"
 echo ""
 
 # Test API endpoint
-echo -e "${YELLOW}🧪 Testing API endpoint...${NC}"
-if curl -s "http://$LOCAL_IP:8001/api/users" >/dev/null 2>&1; then
-    echo -e "${GREEN}✅ API is responding${NC}"
-    USER_COUNT=$(curl -s "http://$LOCAL_IP:8001/api/users" | python3 -c "import sys, json; data=json.load(sys.stdin); print(len(data))" 2>/dev/null || echo "?")
+echo -e "${YELLOW}🧪 Testing API endpoints...${NC}"
+
+# Test backend API (port 5001)
+if curl -s "http://$LOCAL_IP:5001/api/users" >/dev/null 2>&1; then
+    echo -e "${GREEN}✅ Backend API is responding${NC}"
+    USER_COUNT=$(curl -s "http://$LOCAL_IP:5001/api/users" | python3 -c "import sys, json; data=json.load(sys.stdin); print(len(data))" 2>/dev/null || echo "?")
     echo -e "${BLUE}👥 Users in database: $USER_COUNT${NC}"
 else
-    echo -e "${RED}❌ API is not responding${NC}"
+    echo -e "${RED}❌ Backend API is not responding${NC}"
+fi
+
+# Test frontend serving (port 8001)
+if curl -s "http://$LOCAL_IP:8001/index.html" >/dev/null 2>&1; then
+    echo -e "${GREEN}✅ Frontend is serving pages${NC}"
+else
+    echo -e "${RED}❌ Frontend is not serving pages${NC}"
 fi
 
 echo ""

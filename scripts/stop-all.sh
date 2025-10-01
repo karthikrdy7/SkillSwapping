@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 # Get the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Function to kill process on port
 kill_port() {
@@ -64,4 +64,4 @@ echo -e "${BLUE}📊 Server Status:${NC}"
 echo "   • Backend (port 5001): Stopped"
 echo "   • Frontend (port 8001): Stopped"
 echo ""
-echo -e "${GREEN}🎉 Ready to restart with ./start-all.sh${NC}"
+echo -e "${GREEN}🎉 Ready to restart with scripts/start-all.sh${NC}"

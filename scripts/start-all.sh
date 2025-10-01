@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 # Get the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 echo -e "${BLUE}📁 Project Root: $PROJECT_ROOT${NC}"
 
@@ -81,6 +81,9 @@ echo -e "${YELLOW}🔍 Checking for existing processes...${NC}"
 kill_port 5001
 kill_port 8001
 
+# Extra wait to ensure ports are fully released
+sleep 2
+
 # Get local IP for mobile access
 LOCAL_IP=$(get_local_ip)
 echo -e "${BLUE}📡 Local IP Address: $LOCAL_IP${NC}"
@@ -91,7 +94,17 @@ if [ -d "$PROJECT_ROOT/.venv" ]; then
     source "$PROJECT_ROOT/.venv/bin/activate"
 else
     echo -e "${YELLOW}⚠️  Virtual environment not found at .venv${NC}"
-    echo -e "${YELLOW}   You may need to install dependencies manually${NC}"
+    echo -e "${YELLOW}   Installing dependencies system-wide...${NC}"
+    
+    # Check if dependencies are installed
+    if ! python3 -c "import flask, bcrypt" 2>/dev/null; then
+        echo -e "${BLUE}📦 Installing required Python packages...${NC}"
+        cd "$PROJECT_ROOT/backend"
+        pip3 install -r requirements.txt --break-system-packages 2>/dev/null || pip3 install -r requirements.txt --user
+        echo -e "${GREEN}✅ Dependencies installed${NC}"
+    else
+        echo -e "${GREEN}✅ Dependencies already available${NC}"
+    fi
 fi
 
 # Check if backend directory exists
@@ -115,6 +128,47 @@ if [ ! -f "app.py" ]; then
     echo -e "${RED}❌ app.py not found in backend directory!${NC}"
     exit 1
 fi
+
+# Check and fix password hashing issues
+echo -e "${BLUE}🔐 Checking password security...${NC}"
+python3 -c "
+import sqlite3
+import os
+try:
+    from secure_auth import SecureAuth
+    
+    db_path = 'app.db'
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path)
+        cursor = conn.execute('SELECT COUNT(*) FROM users WHERE length(password) < 60')
+        plain_passwords = cursor.fetchone()[0]
+        
+        if plain_passwords > 0:
+            print(f'⚠️  Found {plain_passwords} users with insecure passwords')
+            print('🔧 Migrating passwords to secure bcrypt hashes...')
+            
+            auth = SecureAuth()
+            cursor = conn.execute('SELECT id, username, password FROM users WHERE length(password) < 60')
+            users_to_fix = cursor.fetchall()
+            
+            for user_id, username, old_password in users_to_fix:
+                # Generate a secure hash
+                new_hash = auth.hash_password(old_password)
+                conn.execute('UPDATE users SET password = ? WHERE id = ?', (new_hash, user_id))
+                print(f'   ✅ Updated password for {username}')
+            
+            conn.commit()
+            print(f'🔐 Successfully migrated {len(users_to_fix)} passwords to secure hashes')
+        else:
+            print('✅ All passwords are already securely hashed')
+        
+        conn.close()
+    else:
+        print('ℹ️  Database will be created when first user registers')
+except Exception as e:
+    print(f'⚠️  Could not check password security: {e}')
+    print('   (This is normal on first startup)')
+" 2>/dev/null || echo -e "${YELLOW}⚠️  Password check will happen after dependencies are available${NC}"
 
 # Start Flask backend in background
 python3 app.py > ../backend.log 2>&1 &
@@ -152,8 +206,8 @@ fi
 FRONTEND_PID=$!
 echo -e "${GREEN}✅ Frontend started with PID: $FRONTEND_PID${NC}"
 
-# Wait a moment for frontend to start
-sleep 3
+# Wait longer for frontend to start (increased from 3 to 8 seconds)
+sleep 8
 
 # Check if frontend is running
 if ! check_port 8001; then
@@ -216,13 +270,26 @@ echo "   • Frontend PID: $FRONTEND_PID"
 echo ""
 echo -e "${YELLOW}🛑 To stop all servers, run:${NC}"
 echo "   kill $BACKEND_PID $FRONTEND_PID"
-echo "   or use: ./stop-all.sh"
+echo "   or use: scripts/stop-all.sh"
 echo ""
 echo -e "${GREEN}✨ Enjoy using SkillSwapping!${NC}"
 
 # Save PIDs for stop script
 echo "$BACKEND_PID" > "$PROJECT_ROOT/.backend.pid"
 echo "$FRONTEND_PID" > "$PROJECT_ROOT/.frontend.pid"
+
+# Run active users check after servers are started
+echo ""
+echo -e "${BLUE}👥 Checking current active users...${NC}"
+echo "=" * 50
+cd "$PROJECT_ROOT"
+if [ -f "scripts/run-active-users.sh" ]; then
+    ./scripts/run-active-users.sh
+else
+    echo -e "${YELLOW}⚠️  run-active-users.sh not found, running directly...${NC}"
+    cd backend && python3 active_users.py && cd ..
+fi
+echo ""
 
 # Keep the script running and monitor processes
 echo ""

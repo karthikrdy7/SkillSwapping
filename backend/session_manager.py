@@ -102,6 +102,44 @@ class SessionManager:
         conn.close()
         return users
     
+    def get_recently_active_users(self, minutes=5):
+        """Get list of users active within the last N minutes"""
+        cutoff_time = datetime.now() - timedelta(minutes=minutes)
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.execute('''
+            SELECT u.id, u.username, u.first_name, u.last_name, u.username, 
+                   u.skills_have, u.skills_want, u.preferred_language, u.last_login,
+                   s.login_time, s.last_activity
+            FROM users u
+            JOIN user_sessions s ON u.id = s.user_id
+            WHERE u.is_online = 1 AND s.is_active = 1 
+            AND s.last_activity >= ?
+            ORDER BY s.last_activity DESC
+        ''', (cutoff_time,))
+        
+        users = []
+        for row in cursor.fetchall():
+            last_activity = datetime.fromisoformat(row[10]) if row[10] else datetime.now()
+            minutes_ago = (datetime.now() - last_activity).total_seconds() / 60
+            
+            users.append({
+                'id': row[0],
+                'username': row[1], 
+                'first_name': row[2],
+                'last_name': row[3],
+                'email': row[4],  # using username as email for now
+                'skills_have': row[5],
+                'skills_want': row[6], 
+                'preferred_language': row[7],
+                'last_login': row[8],
+                'session_start': row[9],
+                'last_activity': row[10],
+                'minutes_since_activity': round(minutes_ago, 1)
+            })
+        
+        conn.close()
+        return users
+    
     def cleanup_expired_sessions(self, hours=24):
         """Remove sessions older than specified hours"""
         cutoff = datetime.now() - timedelta(hours=hours)

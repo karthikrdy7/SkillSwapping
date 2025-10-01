@@ -23,14 +23,22 @@ else
 fi
 
 # Activate virtual environment and install dependencies
-echo "📦 Installing dependencies..."
+echo "📦 Setting up dependencies..."
 cd "$PROJECT_DIR"
-source .venv/bin/activate
-pip install -r backend/requirements.txt
-echo "✅ Dependencies installed"
+
+if [ -d ".venv" ]; then
+    echo "🐍 Activating virtual environment..."
+    source .venv/bin/activate
+    pip install -r backend/requirements.txt
+    echo "✅ Dependencies installed in virtual environment"
+else
+    echo "⚠️  No virtual environment found, installing system-wide..."
+    pip3 install -r backend/requirements.txt --break-system-packages 2>/dev/null || pip3 install -r backend/requirements.txt --user
+    echo "✅ Dependencies installed"
+fi
 
 # Check if database exists
-if [ ! -f "$SCRIPT_DIR/app.db" ]; then
+if [ ! -f "$PROJECT_DIR/backend/app.db" ]; then
     echo "🗄️ Database will be created automatically when app starts"
 else
     echo "✅ Database exists"
@@ -42,6 +50,6 @@ echo "   Server will be available at: http://127.0.0.1:5001"
 echo "   Press Ctrl+C to stop the server"
 echo ""
 
-# Run the Flask application
-cd "$SCRIPT_DIR"
-python app.py
+# Run the Flask application with python3
+cd "$PROJECT_DIR/backend"
+python3 app.py

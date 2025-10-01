@@ -6,17 +6,17 @@ A web application that connects professionals who want to teach and learn skills
 
 ### Start Everything (Recommended)
 ```bash
-./start-all.sh
+scripts/start-all.sh
 ```
 
 ### Stop Everything
 ```bash
-./stop-all.sh
+scripts/stop-all.sh
 ```
 
 ### Test Mobile Access
 ```bash
-./test-mobile.sh
+scripts/test-mobile.sh
 ```
 
 ## 📋 Table of Contents
@@ -53,19 +53,24 @@ A web application that connects professionals who want to teach and learn skills
 
 ```
 skillswapping/
-├── 🚀 start-all.sh              # Start both servers (MAIN SCRIPT)
-├── 🛑 stop-all.sh               # Stop all servers
-├── 📱 test-mobile.sh            # Test mobile access
-├── 📖 README.md                 # This file
+├── � README.md                 # This file
 ├── 📋 PROJECT_OVERVIEW.md       # Detailed project documentation
 ├── 📝 SCRIPTS_README.md         # Script documentation
+├──
+├── scripts/                     # Shell scripts for automation
+│   ├── 🚀 start-all.sh         # Start both servers (MAIN SCRIPT)
+│   ├── 🛑 stop-all.sh          # Stop all servers
+│   ├── 📱 test-mobile.sh       # Test mobile access
+│   ├── run-active-users.sh     # Run active users analysis
+│   ├── check_users.sh          # Check user data
+│   ├── quick_stats.sh          # Quick user statistics
+│   └── run.sh                  # Legacy backend script
 ├──
 ├── backend/                     # Flask backend application
 │   ├── app.py                  # Main Flask server (Port 5001)
 │   ├── simple_server.py        # Frontend server (Port 8001)
 │   ├── app.db                  # SQLite database
 │   ├── requirements.txt        # Python dependencies
-│   ├── run.sh                  # Legacy backend script
 │   └── [utilities...]          # Database management scripts
 ├──
 ├── frontend/                    # Static frontend files
@@ -97,12 +102,12 @@ skillswapping/
 
 2. **Make scripts executable** (if needed)
    ```bash
-   chmod +x start-all.sh stop-all.sh test-mobile.sh
+   chmod +x scripts/start-all.sh scripts/stop-all.sh scripts/test-mobile.sh
    ```
 
 3. **Virtual environment** (auto-activated by start script)
    ```bash
-   # Virtual environment is automatically activated by start-all.sh
+   # Virtual environment is automatically activated by scripts/start-all.sh
    # Manual activation: source .venv/bin/activate
    ```
 
@@ -110,7 +115,7 @@ skillswapping/
 
 ### Method 1: One-Command Start (Recommended)
 ```bash
-./start-all.sh
+scripts/start-all.sh
 ```
 **This will:**
 - ✅ Activate virtual environment
@@ -136,9 +141,9 @@ python simple_server.py
 ### Stopping the Application
 ```bash
 # Quick stop
-./stop-all.sh
+scripts/stop-all.sh
 
-# Or use Ctrl+C in the start-all.sh terminal
+# Or use Ctrl+C in the scripts/start-all.sh terminal
 # Or kill specific processes: kill [PID]
 ```
 
@@ -162,7 +167,7 @@ Dashboards:
 ```
 
 ### 📱 Mobile Access (Same WiFi Network)
-**Replace `[YOUR-IP]` with the IP shown by start-all.sh**
+**Replace `[YOUR-IP]` with the IP shown by scripts/start-all.sh**
 ```
 Frontend App:   http://[YOUR-IP]:8001
 
@@ -181,7 +186,7 @@ Dashboards:
 ### Quick Mobile Setup
 1. **Start the servers**
    ```bash
-   ./start-all.sh
+   scripts/start-all.sh
    ```
    
 2. **Note the IP address** shown in the output (e.g., 192.168.4.41)
@@ -193,7 +198,7 @@ Dashboards:
 
 ### Test Mobile Access
 ```bash
-./test-mobile.sh
+scripts/test-mobile.sh
 ```
 This will:
 - ✅ Detect your local IP address
@@ -330,8 +335,8 @@ lsof -i :5001
 lsof -i :8001
 
 # Stop all and restart
-./stop-all.sh
-./start-all.sh
+scripts/stop-all.sh
+scripts/start-all.sh
 ```
 
 #### "Virtual environment not found"
@@ -365,7 +370,7 @@ python simple_server.py
 #### "Mobile access not working"
 ```bash
 # Test mobile access
-./test-mobile.sh
+scripts/test-mobile.sh
 
 # Check firewall settings
 # Verify same WiFi network
@@ -385,7 +390,7 @@ ps aux | grep python
 kill [PID]
 
 # Kill all SkillSwapping processes
-./stop-all.sh
+scripts/stop-all.sh
 ```
 
 ## 👨‍💻 Development
@@ -399,9 +404,9 @@ kill [PID]
 
 ### Development Workflow
 1. **Make changes** to backend or frontend files
-2. **Restart servers** with `./start-all.sh`
+2. **Restart servers** with `scripts/start-all.sh`
 3. **Test locally** with browser developer tools
-4. **Test mobile** with `./test-mobile.sh`
+4. **Test mobile** with `scripts/test-mobile.sh`
 5. **Commit changes** with git
 
 ### File Organization
@@ -423,13 +428,13 @@ kill [PID]
 ### Essential Commands
 ```bash
 # Start everything
-./start-all.sh
+scripts/start-all.sh
 
 # Stop everything  
-./stop-all.sh
+scripts/stop-all.sh
 
 # Test mobile access
-./test-mobile.sh
+scripts/test-mobile.sh
 
 # View users
 python backend/view_users.py
@@ -452,7 +457,7 @@ python backend/count_users.py
 
 ## 🎉 Success!
 
-If you see this in your terminal after running `./start-all.sh`:
+If you see this in your terminal after running `scripts/start-all.sh`:
 
 ```
 🎉 SkillSwapping Application Started Successfully!

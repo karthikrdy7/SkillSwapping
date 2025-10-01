@@ -11,8 +11,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Check if database exists
-if [ ! -f "$SCRIPT_DIR/app.db" ]; then
-    echo "❌ Database not found at $SCRIPT_DIR/app.db"
+if [ ! -f "$PROJECT_DIR/backend/app.db" ]; then
+    echo "❌ Database not found at $PROJECT_DIR/backend/app.db"
     echo "   Please run the application first to create the database."
     exit 1
 fi
@@ -22,7 +22,7 @@ if [ -d "$PROJECT_DIR/.venv" ]; then
     source "$PROJECT_DIR/.venv/bin/activate"
     echo "✅ Virtual environment activated"
 else
-    echo "⚠️  Virtual environment not found. Using system Python."
+    echo "⚠️  Virtual environment not found. Using system Python3."
 fi
 
 # Function to show usage
@@ -48,21 +48,21 @@ show_usage() {
 # Function to get user count
 get_user_count() {
     echo "📊 Getting user count..."
-    python3 "$SCRIPT_DIR/count_users.py"
+    python3 "$PROJECT_DIR/backend/count_users.py"
 }
 
 # Function to show user list (table format)
 show_user_list() {
     echo "📋 User List (Table Format):"
     echo "----------------------------"
-    python3 "$SCRIPT_DIR/list_users.py"
+    python3 "$PROJECT_DIR/backend/list_users.py"
 }
 
 # Function to show formatted user view
 show_user_view() {
     echo "👥 User Data (Detailed View):"
     echo "-----------------------------"
-    python3 "$SCRIPT_DIR/view_users.py"
+    python3 "$PROJECT_DIR/backend/view_users.py"
 }
 
 # Function to show all info

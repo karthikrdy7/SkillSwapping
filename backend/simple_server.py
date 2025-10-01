@@ -181,45 +181,36 @@ class SkillSwappingHandler(http.server.SimpleHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             login_data = json.loads(post_data.decode('utf-8'))
             
-            # Connect to database
-            db_path = '/Users/karthikreddy/Documents/project/skillswapping/backend/app.db'
-            conn = sqlite3.connect(db_path)
-            conn.row_factory = sqlite3.Row
+            # Use the secure authentication system
+            import sys
+            sys.path.append('/Users/karthikreddy/Documents/project/skillswapping/backend')
+            from secure_auth import SecureAuth
             
-            # Find user
-            user = conn.execute('''
-                SELECT id, username, first_name, last_name, preferred_language, skills_have, skills_want
-                FROM users WHERE username = ? AND password = ?
-            ''', (login_data['username'], login_data['password'])).fetchone()
+            auth = SecureAuth()
+            result = auth.authenticate_user(login_data['username'], login_data['password'])
             
-            if user:
-                # Update user status
-                conn.execute('UPDATE users SET is_online = 1, last_login = CURRENT_TIMESTAMP WHERE id = ?', (user['id'],))
-                conn.commit()
-                
-                # Send success response
+            if result['success']:
+                # Login successful
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 
-                user_dict = dict(user)
                 response = json.dumps({
                     'success': True,
-                    'user': user_dict
+                    'user': result['user'],
+                    'session_token': result['session_token']
                 })
                 self.wfile.write(response.encode())
-                print(f"User logged in: {user['username']}")
+                print(f"User logged in via simple_server: {result['user']['username']}")
             else:
                 # Invalid credentials
                 self.send_response(401)
                 self.send_header('Content-type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                error_response = json.dumps({'error': 'Invalid username or password'})
+                error_response = json.dumps({'error': result['error']})
                 self.wfile.write(error_response.encode())
-            
-            conn.close()
             
         except Exception as e:
             print(f"Error in user login: {e}")
@@ -457,9 +448,31 @@ if __name__ == '__main__':
     print(f"1. Make sure your mobile is on the same WiFi network")
     print(f"2. Open browser and go to: http://{local_ip}:{PORT}")
     
-    with socketserver.TCPServer(("0.0.0.0", PORT), SkillSwappingHandler) as httpd:
+    # Try to start the server with retry logic
+    max_retries = 3
+    retry_delay = 2
+    
+    for attempt in range(max_retries):
         try:
-            httpd.serve_forever()
+            with socketserver.TCPServer(("0.0.0.0", PORT), SkillSwappingHandler) as httpd:
+                if attempt > 0:
+                    print(f"✅ Server started successfully on attempt {attempt + 1}")
+                httpd.serve_forever()
+                break
+        except OSError as e:
+            if e.errno == 48:  # Address already in use
+                if attempt < max_retries - 1:
+                    print(f"⚠️  Port {PORT} is busy, retrying in {retry_delay} seconds... (attempt {attempt + 1}/{max_retries})")
+                    import time
+                    time.sleep(retry_delay)
+                else:
+                    print(f"❌ Failed to start server after {max_retries} attempts. Port {PORT} appears to be in use.")
+                    print("💡 Try running: lsof -i :8001 to see what's using the port")
+                    print("💡 Or try a different port by modifying PORT variable in this script")
+                    exit(1)
+            else:
+                print(f"❌ Unexpected error: {e}")
+                exit(1)
         except KeyboardInterrupt:
             print("\nServer stopped")
-            httpd.shutdown()
+            break

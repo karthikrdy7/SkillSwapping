@@ -41,6 +41,39 @@ def show_active_users():
         print(f"  ⏰ Last Activity: {user['last_activity']}")
         print()
 
+def show_recently_active_users(minutes=5):
+    """Display users active within the last N minutes"""
+    sm = SessionManager()
+    
+    # Clean up expired sessions first
+    sm.cleanup_expired_sessions(hours=24)
+    
+    recently_active_users = sm.get_recently_active_users(minutes)
+    
+    print(f"🟢 RECENTLY ACTIVE USERS - SKILLSWAPPING (Last {minutes} minutes)")
+    print("=" * 80)
+    print(f"📊 Recently Active: {len(recently_active_users)} users")
+    print("=" * 80)
+    
+    if not recently_active_users:
+        print(f"❌ No users have been active in the last {minutes} minutes")
+        return
+    
+    for i, user in enumerate(recently_active_users, 1):
+        print(f"👤 RECENTLY ACTIVE USER #{i}:")
+        print("-" * 40)
+        print(f"  🆔 ID: {user['id']}")
+        print(f"  📛 Name: {user['first_name']} {user['last_name']}")
+        print(f"  📧 Email: {user['email']}")
+        print(f"  🌍 Language: {user['preferred_language']}")
+        print(f"  ✅ Skills Have: {user['skills_have']}")
+        print(f"  🎯 Skills Want: {user['skills_want']}")
+        print(f"  🔑 Last Login: {user['last_login']}")
+        print(f"  📅 Session Start: {user['session_start']}")
+        print(f"  ⏰ Last Activity: {user['last_activity']}")
+        print(f"  ⏱️  Minutes Since Activity: {user['minutes_since_activity']}")
+        print()
+
 def simulate_user_login(user_id):
     """Simulate a user login for testing"""
     sm = SessionManager()
@@ -94,6 +127,9 @@ if __name__ == '__main__':
         
         if command == "active":
             show_active_users()
+        elif command == "recent":
+            minutes = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+            show_recently_active_users(minutes)
         elif command == "all":
             show_all_users_status()
         elif command == "login" and len(sys.argv) > 2:
@@ -113,18 +149,22 @@ if __name__ == '__main__':
             print("\n3. Active users after login:")
             show_active_users()
             
-            print("\n4. Simulating logout:")
+            print("\n4. Recently active users (last 5 minutes):")
+            show_recently_active_users(5)
+            
+            print("\n5. Simulating logout:")
             simulate_user_logout(token)
             
-            print("\n5. Active users after logout:")
+            print("\n6. Active users after logout:")
             show_active_users()
         else:
             print("Usage:")
-            print("  python3 active_users.py active    - Show currently active users")
-            print("  python3 active_users.py all       - Show all users with status")
-            print("  python3 active_users.py login <user_id> - Simulate user login")
-            print("  python3 active_users.py logout <token> - Simulate user logout")
-            print("  python3 active_users.py test      - Run session test")
+            print("  python3 active_users.py active           - Show currently active users")
+            print("  python3 active_users.py recent [minutes] - Show recently active users (default: 5 minutes)")
+            print("  python3 active_users.py all              - Show all users with status")
+            print("  python3 active_users.py login <user_id>  - Simulate user login")
+            print("  python3 active_users.py logout <token>   - Simulate user logout")
+            print("  python3 active_users.py test             - Run session test")
     else:
-        # Default: show active users
-        show_active_users()
+        # Default: show recently active users (last 5 minutes)
+        show_recently_active_users(5)

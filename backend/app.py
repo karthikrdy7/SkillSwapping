@@ -3,10 +3,17 @@ from flask import Flask, send_from_directory, request, jsonify
 import os
 import sqlite3
 from flask_cors import CORS
+from secure_auth import SecureAuth
+from input_validator import InputValidator, ValidationError
+from error_handling import handle_error, log_api_call, SecurityLogger
 
 
 app = Flask(__name__, static_folder='../')
 CORS(app)
+
+# Initialize security components
+auth = SecureAuth()
+validator = InputValidator()
 
 # --- SQLite setup ---
 DB_PATH = os.path.join(os.path.dirname(__file__), 'app.db')
@@ -31,7 +38,9 @@ def init_db():
                 skills_have TEXT,
                 skills_want TEXT,
                 device_fingerprint TEXT,
-                created_at TEXT
+                created_at TEXT,
+                is_online BOOLEAN DEFAULT 0,
+                last_login DATETIME
             )
         ''')
         conn.commit()
@@ -57,49 +66,71 @@ def serve_static(filename):
 
 # Add a user (signup)
 @app.route('/api/users', methods=['POST'])
+@handle_error
+@log_api_call
 def add_user():
+    # Validate input data
     data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    first_name = data.get('firstName')
-    last_name = data.get('lastName')
-    preferred_language = data.get('preferredLanguage')
-    skills_have = data.get('skillsHave')
-    skills_want = data.get('skillsWant')
-    device_fingerprint = data.get('deviceFingerprint')
-    created_at = data.get('createdAt')
-    if not username or not password:
-        return jsonify({'error': 'Username and password required'}), 400
+    if not data:
+        raise ValidationError("Request body is required")
+    
     try:
-        with get_db_connection() as conn:
-            conn.execute('''
-                INSERT INTO users (username, password, first_name, last_name, preferred_language, skills_have, skills_want, device_fingerprint, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                username, password, first_name, last_name, preferred_language,
-                ','.join(skills_have) if skills_have else '',
-                ','.join(skills_want) if skills_want else '',
-                device_fingerprint, created_at
-            ))
-            conn.commit()
-        return jsonify({'message': 'User added successfully'})
-    except sqlite3.IntegrityError:
-        return jsonify({'error': 'Username already exists'}), 409
+        validated_data = validator.validate_user_registration(data)
+    except ValidationError as e:
+        SecurityLogger.log_suspicious_activity("Invalid registration data", str(e), request.remote_addr)
+        raise e
+    
+    # Create user with secure authentication
+    result = auth.create_user(
+        username=validated_data['username'],
+        password=validated_data['password'],  # This will be securely hashed
+        first_name=validated_data['firstName'],
+        last_name=validated_data['lastName'],
+        preferred_language=validated_data['preferredLanguage'],
+        skills_have=','.join(validated_data['skillsHave']),
+        skills_want=','.join(validated_data['skillsWant']),
+        device_fingerprint=validated_data.get('deviceFingerprint', ''),
+        created_at=data.get('createdAt')
+    )
+    
+    if result['success']:
+        SecurityLogger.log_user_created(validated_data['username'], request.remote_addr)
+        return jsonify({'message': 'User added successfully', 'userId': result['id']})
+    else:
+        raise ValidationError(result['error'])
 
 # Login endpoint
 @app.route('/api/login', methods=['POST'])
+@handle_error
+@log_api_call
 def login():
     data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    if not username or not password:
-        return jsonify({'error': 'Username and password required'}), 400
-    with get_db_connection() as conn:
-        user = conn.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password)).fetchone()
-        if user:
-            return jsonify({'message': 'Login successful', 'user': {'username': user['username'], 'firstName': user['first_name'], 'lastName': user['last_name']}})
-        else:
-            return jsonify({'error': 'Invalid username or password'}), 401
+    if not data:
+        raise ValidationError("Request body is required")
+    
+    try:
+        validated_data = validator.validate_login(data)
+    except ValidationError as e:
+        SecurityLogger.log_failed_login(data.get('username', 'unknown'), request.remote_addr, str(e))
+        raise e
+    
+    # Authenticate user with secure password verification
+    result = auth.authenticate_user(
+        username=validated_data['username'],
+        password=validated_data['password']  # Plain password - will be verified against hash
+    )
+    
+    if result['success']:
+        SecurityLogger.log_successful_login(validated_data['username'], request.remote_addr)
+        return jsonify({
+            'message': 'Login successful',
+            'user': result['user'],
+            'session_token': result['session_token']
+        })
+    else:
+        SecurityLogger.log_failed_login(validated_data['username'], request.remote_addr, result['error'])
+        # Return 401 status for authentication failure
+        return jsonify({'error': result['error']}), 401
 
 # Example: Get all users
 @app.route('/api/users', methods=['GET'])
